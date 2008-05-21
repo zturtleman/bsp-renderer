@@ -1,6 +1,6 @@
 #summary Intro to bsp-renderer
 
-= Introduction =
+= Contents =
 
 Overview of the application
 
