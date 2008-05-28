@@ -31,110 +31,110 @@ using namespace std;
 
 bool ZipHandler::openDir(string dirName)
 {	
-	ZZIP_DIR* dir;
-	dir = zzip_dir_open(_T(dirName.c_str()),0);	
+  ZZIP_DIR* dir;
+  dir = zzip_dir_open(_T(dirName.c_str()),0);	
 
-	if (dir)
-	{
-		dir_t newDir;
-		newDir.dirName = dirName;
-		newDir.dir = dir;
-		dirs.push_back(newDir);			
-		return true;
-	}
-	else
-	{
-		return false;
-	}	
+  if (dir)
+  {
+    dir_t newDir;
+    newDir.dirName = dirName;
+    newDir.dir = dir;
+    dirs.push_back(newDir);			
+    return true;
+  }
+  else
+  {
+    return false;
+  }	
 }
 
 bool ZipHandler::extractFile(string fileName, string outputName, bool ignoreSuffix )
 {
-	bool found = false;
-	bool written = false;
+  bool found = false;
+  bool written = false;
 
-	vector<dir_t>::iterator dirIterator;
-	for (dirIterator = dirs.begin(); dirIterator != dirs.end(); dirIterator++)
-	{
-		dir_t dir_entry = *dirIterator;
-		ZZIP_DIR* dir = dir_entry.dir;
+  vector<dir_t>::iterator dirIterator;
+  for (dirIterator = dirs.begin(); dirIterator != dirs.end(); dirIterator++)
+  {
+    dir_t dir_entry = *dirIterator;
+    ZZIP_DIR* dir = dir_entry.dir;
 
-		if (dir)
-		{
-			ZZIP_DIRENT dirent;
-			while (zzip_dir_read(dir,&dirent) != 0 ) 
-			{
-				int k = 0;
-				   
-				char *text = new char[strlen(dirent.d_name) + 1];			   
-				strcpy_s(text, strlen(dirent.d_name) + 1, dirent.d_name);
-				
-				if (ignoreSuffix)
-				{
-					while (text[k] != '.' && text[k] != '\0')
-						k++;
+    if (dir)
+    {
+      ZZIP_DIRENT dirent;
+      while (zzip_dir_read(dir,&dirent) != 0 ) 
+      {
+        int k = 0;
 
-					text[k] = '\0';
-				}
+        char *text = new char[strlen(dirent.d_name) + 1];			   
+        strcpy_s(text, strlen(dirent.d_name) + 1, dirent.d_name);
 
-				if (!strcmp(text, fileName.c_str()))
-				{							 	   
-					delete text;
-					found = true;
-					break;     
-				}
-				delete text;
-			}
+        if (ignoreSuffix)
+        {
+          while (text[k] != '.' && text[k] != '\0')
+            k++;
 
-			if (found)
-			{
-				ZZIP_FILE* fp = zzip_file_open(dir,dirent.d_name,0);
-				   
-				if (fp) 
-				{		 
-					unsigned char *buf;
-					buf = new unsigned char[dirent.st_size];
+          text[k] = '\0';
+        }
 
-					zzip_ssize_t len = zzip_file_read(fp, buf, dirent.st_size);		
+        if (!strcmp(text, fileName.c_str()))
+        {							 	   
+          delete text;
+          found = true;
+          break;     
+        }
+        delete text;
+      }
 
-					if (len)
-					{			   
-						FILE *textureFile;
-						fopen_s(&textureFile, outputName.c_str(), "wb");
-						fwrite(buf, sizeof(buf[0]), len, textureFile);
-						fclose(textureFile);    	
-						written = true;
-					}
-					delete buf;
-					zzip_file_close(fp);
-				}
-			}
+      if (found)
+      {
+        ZZIP_FILE* fp = zzip_file_open(dir,dirent.d_name,0);
 
-			if (written)
-			{
-				break;
-			}
-		}
-	}
+        if (fp) 
+        {		 
+          unsigned char *buf;
+          buf = new unsigned char[dirent.st_size];
 
-	return written;
+          zzip_ssize_t len = zzip_file_read(fp, buf, dirent.st_size);		
+
+          if (len)
+          {			   
+            FILE *textureFile;
+            fopen_s(&textureFile, outputName.c_str(), "wb");
+            fwrite(buf, sizeof(buf[0]), len, textureFile);
+            fclose(textureFile);    	
+            written = true;
+          }
+          delete buf;
+          zzip_file_close(fp);
+        }
+      }
+
+      if (written)
+      {
+        break;
+      }
+    }
+  }
+
+  return written;
 }
 
 bool ZipHandler::closeDir(string dirName)
 {
-	vector<dir_t>::iterator dirIterator;
-	for (dirIterator = dirs.begin(); dirIterator != dirs.end(); dirIterator++)
-	{
-		dir_t dir_entry = *dirIterator;
-		string name = dir_entry.dirName;
+  vector<dir_t>::iterator dirIterator;
+  for (dirIterator = dirs.begin(); dirIterator != dirs.end(); dirIterator++)
+  {
+    dir_t dir_entry = *dirIterator;
+    string name = dir_entry.dirName;
 
-		if (name.compare(dirName) == 0)
-		{
-			zzip_dir_close(dir_entry.dir);
-			dirs.erase(dirIterator);
-			return true;
-		}
-	}	
+    if (name.compare(dirName) == 0)
+    {
+      zzip_dir_close(dir_entry.dir);
+      dirs.erase(dirIterator);
+      return true;
+    }
+  }	
 
-	return false;
+  return false;
 }

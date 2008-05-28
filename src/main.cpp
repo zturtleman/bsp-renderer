@@ -29,18 +29,18 @@ using namespace std;
 //				    PSTR cmdLine, int showCmd)
 int main(void)
 {			
-	// Enable run-time memory check for debug builds.
-	#if defined(DEBUG) | defined(_DEBUG)
-		_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
-	#endif
+  // Enable run-time memory check for debug builds.
+#if defined(DEBUG) | defined(_DEBUG)
+  _CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+#endif
 
-	BaseApp e;
-	gBaseApp = &e;	
+  BaseApp e;
+  gBaseApp = &e;	
 
-	gBaseApp->initDInput();
-	gBaseApp->initRenderer("../../../media/bsp.cfg");
+  gBaseApp->initDInput();
+  gBaseApp->initRenderer("../../../media/bsp.cfg");
 
-	gBaseApp->run();
+  gBaseApp->run();
 
-	return 0;
+  return 0;
 }

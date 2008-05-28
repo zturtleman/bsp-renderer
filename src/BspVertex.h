@@ -27,17 +27,17 @@ along with bsp-renderer.  If not, see <http://www.gnu.org/licenses/>.
 class BspVertex
 {
 public:
-	BspVertex();
-	BspVertex(float p[3], float texcoord[2][2], float n[3]);
+  BspVertex();
+  BspVertex(float p[3], float texcoord[2][2], float n[3]);
 
-	float mPosition[3];
-	float mTexcoord[2][2];
-	float mNormal[3];
+  float mPosition[3];
+  float mTexcoord[2][2];
+  float mNormal[3];
 
-	BspVertex operator+(BspVertex a);
-	BspVertex operator*(float a);
+  BspVertex operator+(BspVertex a);
+  BspVertex operator*(float a);
 
-	void normalise(void);
+  void normalise(void);
 
 };
 

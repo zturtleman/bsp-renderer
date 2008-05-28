@@ -29,21 +29,21 @@ along with bsp-renderer.  If not, see <http://www.gnu.org/licenses/>.
 class Bezier 
 {
 public:
-	Bezier();
-	~Bezier();
-	
-	BspVertex mControls[9];
-	void tessellate(int level);
+  Bezier();
+  ~Bezier();
 
-	BspVertex *mVertex;
-	unsigned int *mIndex;
-	unsigned int *mTrianglesPerRow;
-	unsigned int *mRowIndex;
+  BspVertex mControls[9];
+  void tessellate(int level);
 
-	unsigned int mNumIndex;
-	unsigned int mNumVertex;
-	int mBaseBufferindex;
-	int mBaseVertexIndex;
+  BspVertex *mVertex;
+  unsigned int *mIndex;
+  unsigned int *mTrianglesPerRow;
+  unsigned int *mRowIndex;
+
+  unsigned int mNumIndex;
+  unsigned int mNumVertex;
+  int mBaseBufferindex;
+  int mBaseVertexIndex;
 };
 
 #endif

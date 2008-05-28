@@ -26,75 +26,75 @@ along with bsp-renderer.  If not, see <http://www.gnu.org/licenses/>.
 
 BspVertex::BspVertex()
 {
-	for (int i=0; i<3; i++)
-		mPosition[i] = 0;
+  for (int i=0; i<3; i++)
+    mPosition[i] = 0;
 
-	for (int i=0; i<3; i++)
-		mNormal[i] = 0;
+  for (int i=0; i<3; i++)
+    mNormal[i] = 0;
 
-	for(int i=0; i<2; i++)
-		for(int j=0; j<2; j++)
-			mTexcoord[i][j] = 0;
+  for(int i=0; i<2; i++)
+    for(int j=0; j<2; j++)
+      mTexcoord[i][j] = 0;
 }
 
 BspVertex::BspVertex(float p[3], float texcoord[2][2], float n[3])
 {
-	for (int i=0; i<3; i++)
-		mPosition[i] = p[i];
+  for (int i=0; i<3; i++)
+    mPosition[i] = p[i];
 
-	for (int i=0; i<3; i++)
-		mNormal[i] = n[i];
+  for (int i=0; i<3; i++)
+    mNormal[i] = n[i];
 
-	for(int i=0; i<2; i++)
-		for(int j=0; j<2; j++)
-		{		
-			this->mTexcoord[i][j] = texcoord[i][j];
-		}
+  for(int i=0; i<2; i++)
+    for(int j=0; j<2; j++)
+    {		
+      this->mTexcoord[i][j] = texcoord[i][j];
+    }
 }
 
 BspVertex BspVertex::operator+(BspVertex a)
 {
-	BspVertex res;
+  BspVertex res;
 
-	for (int i=0; i<3; i++)
-	{
-		res.mPosition[i] = this->mPosition[i] + a.mPosition[i];
-		res.mNormal[i] = this->mNormal[i] + a.mNormal[i];
-	}
+  for (int i=0; i<3; i++)
+  {
+    res.mPosition[i] = this->mPosition[i] + a.mPosition[i];
+    res.mNormal[i] = this->mNormal[i] + a.mNormal[i];
+  }
 
-	for(int i=0; i<2; i++)
-		for(int j=0; j<2; j++)
-		{			
-			res.mTexcoord[i][j] = this->mTexcoord[i][j] + a.mTexcoord[i][j];
-		}
+  for(int i=0; i<2; i++)
+    for(int j=0; j<2; j++)
+    {			
+      res.mTexcoord[i][j] = this->mTexcoord[i][j] + a.mTexcoord[i][j];
+    }
 
-	return res;
+    return res;
 }
 
 BspVertex BspVertex::operator*(float a)
 {
-	BspVertex res;
+  BspVertex res;
 
-	for (int i=0; i<3; i++)
-	{
-		res.mPosition[i] = this->mPosition[i] * a;
-		res.mNormal[i] = this->mNormal[i] * a;
-	}
+  for (int i=0; i<3; i++)
+  {
+    res.mPosition[i] = this->mPosition[i] * a;
+    res.mNormal[i] = this->mNormal[i] * a;
+  }
 
-	for(int i=0; i<2; i++)
-		for(int j=0; j<2; j++)
-			res.mTexcoord[i][j] = this->mTexcoord[i][j] * a;
+  for(int i=0; i<2; i++)
+    for(int j=0; j<2; j++)
+      res.mTexcoord[i][j] = this->mTexcoord[i][j] * a;
 
-	return res;
+  return res;
 }
 
 void BspVertex::normalise(void)
 {
-	D3DXVECTOR3 n((float)mNormal[0], (float)mNormal[1], (float)mNormal[2]);
+  D3DXVECTOR3 n((float)mNormal[0], (float)mNormal[1], (float)mNormal[2]);
 
-	D3DXVec3Normalize(&n, &n);
+  D3DXVec3Normalize(&n, &n);
 
-	mNormal[0] = n.x;
-	mNormal[1] = n.y;
-	mNormal[2] = n.z;
+  mNormal[0] = n.x;
+  mNormal[1] = n.y;
+  mNormal[2] = n.z;
 }
