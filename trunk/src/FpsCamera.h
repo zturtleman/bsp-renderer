@@ -1,4 +1,3 @@
-
 /*
 ===========================================================================
 Copyright (C) 2008 Daniel Örstadius
@@ -35,47 +34,47 @@ enum {COLL_MODE_DISABLED, COLL_MODE_NO_GRAVITY, COLL_MODE_FULL};
 class FpsCamera
 {
 public:
-	FpsCamera();
+  FpsCamera();
 
-	void setLens(float fov, float aspect, float nearZ, float farZ, float screenHeight, float screenWidth);
-	void update(const float dt);
-	void setDInput(DInput *DInput);		
-	void setViewFrustum(ViewFrustum *viewFrustum);
-	void setCollision(Collision *collision);
+  void setLens(float fov, float aspect, float nearZ, float farZ, float screenHeight, float screenWidth);
+  void update(const float dt);
+  void setDInput(DInput *DInput);		
+  void setViewFrustum(ViewFrustum *viewFrustum);
+  void setCollision(Collision *collision);
 
   void setCollMode(int mode);
 
-	const D3DXMATRIX& view() const;
-	const D3DXMATRIX& projection() const;
-	const D3DXMATRIX& viewProj(void) const;	
-	const D3DXVECTOR3* position(void) const;	
+  const D3DXMATRIX& view() const;
+  const D3DXMATRIX& projection() const;
+  const D3DXMATRIX& viewProj(void) const;	
+  const D3DXVECTOR3* position(void) const;	
 
 private:
-	void buildViewMatrix(void);
+  void buildViewMatrix(void);
 
-	// FpsCamera related matrices.
-	D3DXMATRIX mViewMatrix;
-	D3DXMATRIX mProjectionMatrix;
-	D3DXMATRIX mViewProjMatrix;
+  // FpsCamera related matrices.
+  D3DXMATRIX mViewMatrix;
+  D3DXMATRIX mProjectionMatrix;
+  D3DXMATRIX mViewProjMatrix;
 
-	// Relative to world space.
-	D3DXVECTOR3 mPosition;	
-	D3DXVECTOR3 mRightVector;
-	D3DXVECTOR3 mUpVector;
-	D3DXVECTOR3 mLookVector;
-		
-	float mSpeed;
+  // Relative to world space.
+  D3DXVECTOR3 mPosition;	
+  D3DXVECTOR3 mRightVector;
+  D3DXVECTOR3 mUpVector;
+  D3DXVECTOR3 mLookVector;
+
+  float mSpeed;
   D3DXVECTOR3 mDir;
   float mScreenHeight;
   float mScreenWidth;
 
   int mCollMode;
 
-	DInput *mDInput;	
+  DInput *mDInput;	
 
-	ViewFrustum *mViewFrustum;
+  ViewFrustum *mViewFrustum;
 
-	Collision *mCollision;
+  Collision *mCollision;
 };
 
 #endif /* _CAMERA_H */

@@ -26,91 +26,91 @@ along with bsp-renderer.  If not, see <http://www.gnu.org/licenses/>.
 
 DInput::DInput(DWORD keyboardFlags, DWORD mouseFlags, HWND hwnd)
 {	
-	HINSTANCE hInstance = GetModuleHandle(0);	
+  HINSTANCE hInstance = GetModuleHandle(0);	
 
-	ZeroMemory(mKeyboardState, sizeof(mKeyboardState));
-	ZeroMemory(&mMouseState, sizeof(mMouseState));
+  ZeroMemory(mKeyboardState, sizeof(mKeyboardState));
+  ZeroMemory(&mMouseState, sizeof(mMouseState));
 
-	V(DirectInput8Create(
-        hInstance, DIRECTINPUT_VERSION, 
-		    IID_IDirectInput8, (void**)&mDInput, NULL));
+  V(DirectInput8Create(
+    hInstance, DIRECTINPUT_VERSION, 
+    IID_IDirectInput8, (void**)&mDInput, NULL));
 
   HRESULT hr;
 
-	hr = mDInput->CreateDevice(GUID_SysKeyboard, &mKeyboardDevice, 0);
+  hr = mDInput->CreateDevice(GUID_SysKeyboard, &mKeyboardDevice, 0);
   if (FAILED(hr))
   {
     //DInput_Exit();
     return;
   }
 
-	V(mKeyboardDevice->SetDataFormat(&c_dfDIKeyboard));
-	V(mKeyboardDevice->SetCooperativeLevel(hwnd, keyboardFlags));
-	V(mKeyboardDevice->Acquire());
+  V(mKeyboardDevice->SetDataFormat(&c_dfDIKeyboard));
+  V(mKeyboardDevice->SetCooperativeLevel(hwnd, keyboardFlags));
+  V(mKeyboardDevice->Acquire());
 
-	V(mDInput->CreateDevice(GUID_SysMouse, &mMouseDevice, 0));
-	V(mMouseDevice->SetDataFormat(&c_dfDIMouse2));
-	V(mMouseDevice->SetCooperativeLevel(hwnd, mouseFlags));
-	V(mMouseDevice->Acquire());
+  V(mDInput->CreateDevice(GUID_SysMouse, &mMouseDevice, 0));
+  V(mMouseDevice->SetDataFormat(&c_dfDIMouse2));
+  V(mMouseDevice->SetCooperativeLevel(hwnd, mouseFlags));
+  V(mMouseDevice->Acquire());
 }
 
 DInput::~DInput()
 {
-	mKeyboardDevice->Unacquire();
-	mMouseDevice->Unacquire();
-	ReleaseCOM(mKeyboardDevice);
-	ReleaseCOM(mMouseDevice);
+  mKeyboardDevice->Unacquire();
+  mMouseDevice->Unacquire();
+  ReleaseCOM(mKeyboardDevice);
+  ReleaseCOM(mMouseDevice);
 }
 
 void DInput::poll(void)
 {	
-	HRESULT hr = mKeyboardDevice->GetDeviceState(sizeof(mKeyboardState), (void**)&mKeyboardState); 
+  HRESULT hr = mKeyboardDevice->GetDeviceState(sizeof(mKeyboardState), (void**)&mKeyboardState); 
 
-	if( FAILED(hr) )
-	{
-		if (hr == DIERR_INPUTLOST)
-		{
-			// Keyboard lost
-			ZeroMemory(mKeyboardState, sizeof(mKeyboardState));
-			 
-			hr = mKeyboardDevice->Acquire();   
-		}
-	}
+  if( FAILED(hr) )
+  {
+    if (hr == DIERR_INPUTLOST)
+    {
+      // Keyboard lost
+      ZeroMemory(mKeyboardState, sizeof(mKeyboardState));
 
-	hr = mMouseDevice->GetDeviceState(sizeof(DIMOUSESTATE2), (void**)&mMouseState); 
+      hr = mKeyboardDevice->Acquire();   
+    }
+  }
 
-	if( FAILED(hr) )
-	{
-		if (hr == DIERR_INPUTLOST)
-		{
-			// Mouse lost
-			ZeroMemory(&mMouseState, sizeof(mMouseState));
-			
-			hr = mMouseDevice->Acquire(); 
-		}
-	}
+  hr = mMouseDevice->GetDeviceState(sizeof(DIMOUSESTATE2), (void**)&mMouseState); 
+
+  if( FAILED(hr) )
+  {
+    if (hr == DIERR_INPUTLOST)
+    {
+      // Mouse lost
+      ZeroMemory(&mMouseState, sizeof(mMouseState));
+
+      hr = mMouseDevice->Acquire(); 
+    }
+  }
 }
 
 bool DInput::keyDown(const char key) const 
 {
-	return (mKeyboardState[key] & 0x80) != 0;
+  return (mKeyboardState[key] & 0x80) != 0;
 }
 
 bool DInput::mouseButtonDown(const int button) const 
 {
-	return (mMouseState.rgbButtons[button] & 0x80) != 0;
+  return (mMouseState.rgbButtons[button] & 0x80) != 0;
 }
 float DInput::mouseDeltaX() const 
 {
-	return (float)mMouseState.lX;
+  return (float)mMouseState.lX;
 }
 
 float DInput::mouseDeltaY() const 
 {
-	return (float)mMouseState.lY;
+  return (float)mMouseState.lY;
 }
 
 float DInput::mouseDeltaZ() const 
 {
-	return (float)mMouseState.lZ;
+  return (float)mMouseState.lZ;
 }

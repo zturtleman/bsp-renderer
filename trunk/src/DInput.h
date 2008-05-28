@@ -31,24 +31,24 @@ along with bsp-renderer.  If not, see <http://www.gnu.org/licenses/>.
 class DInput
 {
 public:
-	DInput(DWORD keyboardFlags, DWORD mouseFlags, HWND hwnd);
-	~DInput();
+  DInput(DWORD keyboardFlags, DWORD mouseFlags, HWND hwnd);
+  ~DInput();
 
-	void poll(void);
-	bool keyDown(const char key) const;  
-	bool mouseButtonDown(const int button) const;
-	float mouseDeltaX(void) const; 
-	float mouseDeltaY(void) const;
-	float mouseDeltaZ(void) const;
+  void poll(void);
+  bool keyDown(const char key) const;  
+  bool mouseButtonDown(const int button) const;
+  float mouseDeltaX(void) const; 
+  float mouseDeltaY(void) const;
+  float mouseDeltaZ(void) const;
 
 private:
-	IDirectInput8*       mDInput;
+  IDirectInput8*       mDInput;
 
-	IDirectInputDevice8* mKeyboardDevice;
-	char                 mKeyboardState[256]; 
+  IDirectInputDevice8* mKeyboardDevice;
+  char                 mKeyboardState[256]; 
 
-	IDirectInputDevice8* mMouseDevice;
-	DIMOUSESTATE2        mMouseState;
+  IDirectInputDevice8* mMouseDevice;
+  DIMOUSESTATE2        mMouseState;
 };
 
 #endif /* _DINPUT_H */

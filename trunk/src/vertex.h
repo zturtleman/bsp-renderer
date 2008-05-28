@@ -28,27 +28,27 @@ along with bsp-renderer.  If not, see <http://www.gnu.org/licenses/>.
 
 struct LVertex
 {
-	LVertex(float _x, float _y, float _z, 
-			float _nx, float _ny, float _nz,
-			float _tu, float _tv,
-			float _ltu, float _ltv): 
-			x(_x), y(_y), z(_z),
-			nx(_nx), ny(_ny), nz(_nz),
-			tu(_tu), tv(_tv),
-			ltu(_ltu), ltv(_ltv){}	
-	float x;
-	float y;
-	float z;
-	float nx;
-	float ny;
-	float nz;
-	float tu, tv;
-	float ltu, ltv;
+  LVertex(float _x, float _y, float _z, 
+    float _nx, float _ny, float _nz,
+    float _tu, float _tv,
+    float _ltu, float _ltv): 
+  x(_x), y(_y), z(_z),
+    nx(_nx), ny(_ny), nz(_nz),
+    tu(_tu), tv(_tv),
+    ltu(_ltu), ltv(_ltv){}	
+  float x;
+  float y;
+  float z;
+  float nx;
+  float ny;
+  float nz;
+  float tu, tv;
+  float ltu, ltv;
 };
 
 struct LVertexSky {
-	float x, y, z;
-	float tu, tv;
+  float x, y, z;
+  float tu, tv;
 };
 
 const DWORD VertexFVF = (D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1 | D3DFVF_TEX2 );
@@ -59,39 +59,39 @@ void DeleteVertexDecl(void);
 
 struct VertexPT
 {
-	VertexPT()
-		:pos(0.0f, 0.0f, 0.0f),		
-		tex0(0.0f, 0.0f){}
-	VertexPT(float x, float y, float z, 		
-		float u, float v):pos(x,y,z), tex0(u,v){}
-	VertexPT(const D3DXVECTOR3& v, const D3DXVECTOR2& uv)
-		:pos(v), tex0(uv){}
+  VertexPT()
+    :pos(0.0f, 0.0f, 0.0f),		
+    tex0(0.0f, 0.0f){}
+  VertexPT(float x, float y, float z, 		
+    float u, float v):pos(x,y,z), tex0(u,v){}
+  VertexPT(const D3DXVECTOR3& v, const D3DXVECTOR2& uv)
+    :pos(v), tex0(uv){}
 
-	D3DXVECTOR3 pos;	
-	D3DXVECTOR2 tex0;
+  D3DXVECTOR3 pos;	
+  D3DXVECTOR2 tex0;
 
-	static IDirect3DVertexDeclaration9* Decl;
+  static IDirect3DVertexDeclaration9* Decl;
 };
 
 struct VertexPNTL
 {
-	VertexPNTL()
-		:pos(0.0f, 0.0f, 0.0f),
-		normal(0.0f, 0.0f, 0.0f),
-		tex0(0.0f, 0.0f),
-		tex1(0.0f, 0.0f){}
-	VertexPNTL(float x, float y, float z, 
-		float nx, float ny, float nz,
-		float u, float v,
-		float lu, float lv):pos(x,y,z), normal(nx,ny,nz), tex0(u,v), tex1(lu,lv){}
-	VertexPNTL(const D3DXVECTOR3& v, const D3DXVECTOR3& n, const D3DXVECTOR2& uv, const D3DXVECTOR3& lulv)
-		:pos(v),normal(n), tex0(uv), tex1(lulv){}
+  VertexPNTL()
+    :pos(0.0f, 0.0f, 0.0f),
+    normal(0.0f, 0.0f, 0.0f),
+    tex0(0.0f, 0.0f),
+    tex1(0.0f, 0.0f){}
+  VertexPNTL(float x, float y, float z, 
+    float nx, float ny, float nz,
+    float u, float v,
+    float lu, float lv):pos(x,y,z), normal(nx,ny,nz), tex0(u,v), tex1(lu,lv){}
+  VertexPNTL(const D3DXVECTOR3& v, const D3DXVECTOR3& n, const D3DXVECTOR2& uv, const D3DXVECTOR3& lulv)
+    :pos(v),normal(n), tex0(uv), tex1(lulv){}
 
-	D3DXVECTOR3 pos;
-	D3DXVECTOR3 normal;
-	D3DXVECTOR2 tex0;
-	D3DXVECTOR2 tex1;
+  D3DXVECTOR3 pos;
+  D3DXVECTOR3 normal;
+  D3DXVECTOR2 tex0;
+  D3DXVECTOR2 tex1;
 
-	static IDirect3DVertexDeclaration9* Decl;
+  static IDirect3DVertexDeclaration9* Decl;
 };
 #endif // VERTEX_H

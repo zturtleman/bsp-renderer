@@ -30,13 +30,13 @@ along with bsp-renderer.  If not, see <http://www.gnu.org/licenses/>.
 class ViewFrustum
 {
 public:
-	void update( D3DXMATRIX *fov, D3DXMATRIX *projection );
-	void update( D3DXMATRIX *fov);
+  void update( D3DXMATRIX *fov, D3DXMATRIX *projection );
+  void update( D3DXMATRIX *fov);
 
-	bool checkIfBoxInside( int *mins, int *maxs );
+  bool checkIfBoxInside( int *mins, int *maxs );
 
 private:	
-	D3DXPLANE mPlanes[6]; // the planes of the view frustum
+  D3DXPLANE mPlanes[6]; // the planes of the view frustum
 };
 
 #endif

@@ -33,38 +33,38 @@ enum { TT_RAY, TT_SPHERE };
 class Collision
 {
 public:
-	Collision();
-	void setMap(Q3Map *q3Map);
-	void traceSphere(vec3f start, vec3f end, float radius);
-	void traceRay(vec3f start, vec3f end);
-	void getTraceResult(vec3f *output);
+  Collision();
+  void setMap(Q3Map *q3Map);
+  void traceSphere(vec3f start, vec3f end, float radius);
+  void traceRay(vec3f start, vec3f end);
+  void getTraceResult(vec3f *output);
 
 private:
-	void trace(void);
-	void CheckNode( 
-			int nodeIndex,
-			float startFraction,
-			float endFraction,
-			vec3f start,
-			vec3f end);
-	void CheckBrush( Q3BspBrush *brush );
+  void trace(void);
+  void CheckNode( 
+    int nodeIndex,
+    float startFraction,
+    float endFraction,
+    vec3f start,
+    vec3f end);
+  void CheckBrush( Q3BspBrush *brush );
 
-	Q3Map *mQ3Map;
-		
-	float mOutputFraction;
-	vec3f mOutputEnd;
-	bool mOutputStartOut;
-	bool mOutputAllSolid;
+  Q3Map *mQ3Map;
 
-	vec3f mInputStart;
-	vec3f mInputEnd;
-	vec3f mCollisionNormal;
-	float mEndDistance;
+  float mOutputFraction;
+  vec3f mOutputEnd;
+  bool mOutputStartOut;
+  bool mOutputAllSolid;
 
-	int mTraceType;
-	float mTraceRadius;
+  vec3f mInputStart;
+  vec3f mInputEnd;
+  vec3f mCollisionNormal;
+  float mEndDistance;
 
-	bool mGoodPos;
+  int mTraceType;
+  float mTraceRadius;
+
+  bool mGoodPos;
 };
 
 #endif /* _COLLISION_H */

@@ -39,40 +39,40 @@ along with bsp-renderer.  If not, see <http://www.gnu.org/licenses/>.
 class BaseApp 
 {
 public:
-	static LRESULT CALLBACK WinProc (HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+  static LRESULT CALLBACK WinProc (HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-	BaseApp(void);
-	~BaseApp(void);	
-	int run(void);
+  BaseApp(void);
+  ~BaseApp(void);	
+  int run(void);
 
-	void initDInput(void);
-	void initRenderer(string cfgFile);
+  void initDInput(void);
+  void initRenderer(string cfgFile);
 
-	LRESULT msgProc(UINT msg, WPARAM wParam, LPARAM lParam);
+  LRESULT msgProc(UINT msg, WPARAM wParam, LPARAM lParam);
 
 private:
-	void createDevice(void);
-	void createWindow(void);
-	void createFont(void);
-	void draw(float dt);
-	void onLostDevice(void);
-	void onResetDevice(void);
-	void switchFullScreen(void);	
-	bool isDeviceLost(void);
-	void updateScene(const float dt);	
-	void updateFpsCounter(const float dt);	
+  void createDevice(void);
+  void createWindow(void);
+  void createFont(void);
+  void draw(float dt);
+  void onLostDevice(void);
+  void onResetDevice(void);
+  void switchFullScreen(void);	
+  bool isDeviceLost(void);
+  void updateScene(const float dt);	
+  void updateFpsCounter(const float dt);	
 
-	HWND mhWinHandle;	
-	IDirect3D9* md3dInterface;
-	IDirect3DDevice9* md3dDevice;
-	D3DPRESENT_PARAMETERS md3dPP;
-	ID3DXFont*          mFont;
-	TCHAR fpsText[45];
-	bool mFullScreen;
-	bool mPaused;
-	DInput *mDInput;
-	Renderer *mRenderer;
-	Q3Map *mQ3Map;
+  HWND mhWinHandle;	
+  IDirect3D9* md3dInterface;
+  IDirect3DDevice9* md3dDevice;
+  D3DPRESENT_PARAMETERS md3dPP;
+  ID3DXFont*          mFont;
+  TCHAR fpsText[45];
+  bool mFullScreen;
+  bool mPaused;
+  DInput *mDInput;
+  Renderer *mRenderer;
+  Q3Map *mQ3Map;
 };
 
 extern BaseApp *gBaseApp;

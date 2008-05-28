@@ -39,21 +39,21 @@ void exitFunction(string reason);
 #define DELETE_ARRAY(x) if(x) delete[] x;
 
 #ifdef _DEBUG
-	#ifndef V
-	// does not work with UNICODE defined
-	#define V(x)													\
-	{																\
-		HRESULT hr = x;												\
-		if( FAILED(hr))												\
-		{															\
-			DXTrace( __FILE__, (DWORD)__LINE__, hr, _T(#x), true );	\
-		}															\
-	}																
-	#endif
+#ifndef V
+// does not work with UNICODE defined
+#define V(x)													\
+{																\
+  HRESULT hr = x;												\
+  if( FAILED(hr))												\
+{															\
+  DXTrace( __FILE__, (DWORD)__LINE__, hr, _T(#x), true );	\
+}															\
+}																
+#endif
 #else
-	#ifndef V
-	#define V(x)	x;
-	#endif
+#ifndef V
+#define V(x)	x;
+#endif
 #endif
 
 #ifdef _DEBUG

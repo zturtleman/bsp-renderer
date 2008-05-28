@@ -22,105 +22,105 @@ along with bsp-renderer.  If not, see <http://www.gnu.org/licenses/>.
 // Bezier.cpp -- tessellates the Bezier patches
 
 /* The tessellation code is taken from the document 
-   "Rendering Quake 3 Maps" at 
-   http://graphics.cs.brown.edu/games/quake/quake3.html
-   The author states that it is based on code from 
-   Paul Baker's Octagon project,
-   http://www.paulsprojects.net/opengl/octagon/octagon.html
-   which is released under the New BSD license.
-   Please see the licenses folder.
+"Rendering Quake 3 Maps" at 
+http://graphics.cs.brown.edu/games/quake/quake3.html
+The author states that it is based on code from 
+Paul Baker's Octagon project,
+http://www.paulsprojects.net/opengl/octagon/octagon.html
+which is released under the New BSD license.
+Please see the licenses folder.
 */
- 
+
 #include "Bezier.h"
 #include "misc.h"
 
 Bezier::Bezier()
 {	
-	mVertex = NULL;
-	mIndex = NULL;
-	mTrianglesPerRow = NULL;
-	mRowIndex = NULL;
+  mVertex = NULL;
+  mIndex = NULL;
+  mTrianglesPerRow = NULL;
+  mRowIndex = NULL;
 }
 
 Bezier::~Bezier()
 {
-	DELETE_ARRAY(mVertex);
-	DELETE_ARRAY(mIndex);
-	DELETE_ARRAY(mTrianglesPerRow);
-	DELETE_ARRAY(mRowIndex);
+  DELETE_ARRAY(mVertex);
+  DELETE_ARRAY(mIndex);
+  DELETE_ARRAY(mTrianglesPerRow);
+  DELETE_ARRAY(mRowIndex);
 }
 
 void Bezier::tessellate(int L) 
 {
-    // The number of vertices along a side is 1 + num edges
-    const int L1 = L + 1;
+  // The number of vertices along a side is 1 + num edges
+  const int L1 = L + 1;
 
-	mVertex = new BspVertex[L1*L1];
-	mNumVertex = L1*L1;
+  mVertex = new BspVertex[L1*L1];
+  mNumVertex = L1*L1;
 
-	// Compute the vertices    
-	for (int i = 0; i <= L; ++i)
-	{
-        float a = (float)i / L;
-        float b = 1.0f - a;
+  // Compute the vertices    
+  for (int i = 0; i <= L; ++i)
+  {
+    float a = (float)i / L;
+    float b = 1.0f - a;
 
-        mVertex[i] =
-            mControls[0] * (b * b) + 
-            mControls[3] * (2 * b * a) +
-            mControls[6] * (a * a);
+    mVertex[i] =
+      mControls[0] * (b * b) + 
+      mControls[3] * (2 * b * a) +
+      mControls[6] * (a * a);
+  }
+
+  for (int i = 1; i <= L; i++) 
+  {
+    float a = (float)i / L;
+    float b = 1.0f - a;
+
+    BspVertex temp[3];
+
+    for (int j = 0; j < 3; j++)
+    {
+      int k = 3 * j;
+      temp[j] =
+        mControls[k + 0] * (b * b) + 
+        mControls[k + 1] * (2 * b * a) +
+        mControls[k + 2] * (a * a);
     }
 
-	for (int i = 1; i <= L; i++) 
-	{
-        float a = (float)i / L;
-        float b = 1.0f - a;
+    for(int j = 0; j <= L; ++j) 
+    {
+      float a = (float)j / L;
+      float b = 1.0f - a;
 
-        BspVertex temp[3];
-        
-        for (int j = 0; j < 3; j++)
-		{
-            int k = 3 * j;
-            temp[j] =
-                mControls[k + 0] * (b * b) + 
-                mControls[k + 1] * (2 * b * a) +
-                mControls[k + 2] * (a * a);
-        }
-
-        for(int j = 0; j <= L; ++j) 
-		{
-			float a = (float)j / L;
-            float b = 1.0f - a;
-
-            mVertex[i * L1 + j]=
-                temp[0] * (b * b) + 
-                temp[1] * (2 * b * a) +
-                temp[2] * (a * a);
-        }
+      mVertex[i * L1 + j]=
+        temp[0] * (b * b) + 
+        temp[1] * (2 * b * a) +
+        temp[2] * (a * a);
     }
-	
-	// Compute the indices     
-	mIndex = new unsigned int[L * (L + 1) * 2];
-	mNumIndex = L * (L + 1) * 2;
+  }
 
-    for (int row = 0; row < L; ++row) 
-	{
-        for(int col = 0; col <= L; ++col)	
-		{
-            mIndex[(row * (L + 1) + col) * 2 + 1] = row       * L1 + col;
-            mIndex[(row * (L + 1) + col) * 2]     = (row + 1) * L1 + col;
-        }
+  // Compute the indices     
+  mIndex = new unsigned int[L * (L + 1) * 2];
+  mNumIndex = L * (L + 1) * 2;
+
+  for (int row = 0; row < L; ++row) 
+  {
+    for(int col = 0; col <= L; ++col)	
+    {
+      mIndex[(row * (L + 1) + col) * 2 + 1] = row       * L1 + col;
+      mIndex[(row * (L + 1) + col) * 2]     = (row + 1) * L1 + col;
     }
+  }
 
-	mTrianglesPerRow = new unsigned int[L];
-	mRowIndex = new unsigned int[L];
+  mTrianglesPerRow = new unsigned int[L];
+  mRowIndex = new unsigned int[L];
 
-    for (int row = 0; row < L; ++row) 
-	{
-        mTrianglesPerRow[row] = 2 * L1;
-        //rowIndexes[row]      = &indexes[row * 2 * L1];
-		mRowIndex[row]      = row * 2 * L1;
-    }
+  for (int row = 0; row < L; ++row) 
+  {
+    mTrianglesPerRow[row] = 2 * L1;
+    //rowIndexes[row]      = &indexes[row * 2 * L1];
+    mRowIndex[row]      = row * 2 * L1;
+  }
 
-	for (int i=0; i < L1*L1; i++)
-		mVertex[i].normalise();
+  for (int i=0; i < L1*L1; i++)
+    mVertex[i].normalise();
 }

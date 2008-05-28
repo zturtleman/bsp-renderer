@@ -39,95 +39,95 @@ enum {R_COLL_MODE_DISABLED, R_COLL_MODE_NO_GRAVITY, R_COLL_MODE_FULL};
 class Renderer
 {
 public:
-	Renderer();
-	~Renderer();
+  Renderer();
+  ~Renderer();
 
-	void setDInput(DInput *DInput);
-	void setDXDevice(IDirect3DDevice9* d3dDevice);
-	void setMap(Q3Map *q3Map);
-	void initRenderer(void);
-	void setupState(void);
-	void onResetDevice(D3DPRESENT_PARAMETERS *md3dPP);
-	void onLostDevice(void);
-	void update(const float dt);
-	void draw(void);
-	void createSkyFX(void);
+  void setDInput(DInput *DInput);
+  void setDXDevice(IDirect3DDevice9* d3dDevice);
+  void setMap(Q3Map *q3Map);
+  void initRenderer(void);
+  void setupState(void);
+  void onResetDevice(D3DPRESENT_PARAMETERS *md3dPP);
+  void onLostDevice(void);
+  void update(const float dt);
+  void draw(void);
+  void createSkyFX(void);
   void setCollMode(int mode);  
 
 private:	
 
-	typedef struct{
-		int texture;
-		//int effect;
-		int type;
-		int vertex;
-		int n_vertexes;
-		int meshvert;
-		int n_meshverts;
-		int n_triangles;
-		int lm_index;
-		//int lm_start[2];
-		//int lm_size[2];
-		//float lm_origin[3];
-		//float lm_vecs[2][3];
-		float normal[3];
-		//int size[2];		
-		Q3BspPatch *patch;
-	} Q3BspFaceRenderer;
+  typedef struct{
+    int texture;
+    //int effect;
+    int type;
+    int vertex;
+    int n_vertexes;
+    int meshvert;
+    int n_meshverts;
+    int n_triangles;
+    int lm_index;
+    //int lm_start[2];
+    //int lm_size[2];
+    //float lm_origin[3];
+    //float lm_vecs[2][3];
+    float normal[3];
+    //int size[2];		
+    Q3BspPatch *patch;
+  } Q3BspFaceRenderer;
 
-	void buildIndexBuffer(void);
-	void buildVertexBuffer(void);
-	void initFaces(void);
-	void buildPatchBuffers(void);
-	void resetOptimisationVars(void);
+  void buildIndexBuffer(void);
+  void buildVertexBuffer(void);
+  void initFaces(void);
+  void buildPatchBuffers(void);
+  void resetOptimisationVars(void);
 
-	void drawFace(int faceIndex);
-	void drawSky(void);
-	void resetState(void);
+  void drawFace(int faceIndex);
+  void drawSky(void);
+  void resetState(void);
 
-	FpsCamera *mFpsCamera;
-	DInput *mDInput;
-	IDirect3DDevice9* md3dDevice;
-	ViewFrustum *mViewFrustum;
-	Collision *mCollision;
-	
-	Q3Map *mQ3Map;
+  FpsCamera *mFpsCamera;
+  DInput *mDInput;
+  IDirect3DDevice9* md3dDevice;
+  ViewFrustum *mViewFrustum;
+  Collision *mCollision;
 
-	// textures	
-	IDirect3DTexture9** mD3DTextures; 	
-	// lightmaps	
-	IDirect3DTexture9** mTextureLightMaps;
+  Q3Map *mQ3Map;
 
-	IDirect3DVertexBuffer9* mVB;
-	IDirect3DIndexBuffer9*  mIB;
-	IDirect3DVertexBuffer9* mBezVB;
-	IDirect3DIndexBuffer9*  mBezIB;
+  // textures	
+  IDirect3DTexture9** mD3DTextures; 	
+  // lightmaps	
+  IDirect3DTexture9** mTextureLightMaps;
 
-	int *mFacesToRender;
-	int mNumFacesToRender;
-	Q3BspFaceRenderer *mBspFaces;	
-	int mNumBspFaces;
+  IDirect3DVertexBuffer9* mVB;
+  IDirect3DIndexBuffer9*  mIB;
+  IDirect3DVertexBuffer9* mBezVB;
+  IDirect3DIndexBuffer9*  mBezIB;
 
-	// variables to avoid setting state if not necessary
-	bool mSetStreamAndIndices;
-	bool mSetStreamAndIndices2;
-	int mLastLightMap;
-	int mLastTexture;
+  int *mFacesToRender;
+  int mNumFacesToRender;
+  Q3BspFaceRenderer *mBspFaces;	
+  int mNumBspFaces;
 
-	// sort the faces before rendering
-	void qsortFaces(int start, int end);
-	int qsortPartition(int start, int end);
-	void swapFaces(int i, int j);
-	int *mFacesToSort;
+  // variables to avoid setting state if not necessary
+  bool mSetStreamAndIndices;
+  bool mSetStreamAndIndices2;
+  int mLastLightMap;
+  int mLastTexture;
 
-	// sky shader	
-	ID3DXMesh* mSphere;
-	IDirect3DCubeTexture9* mEnvMap;
-	ID3DXEffect* mFX;
-	D3DXHANDLE mhTech;
-	D3DXHANDLE mhEnvMap;
-	D3DXHANDLE mhWVP;
-	
+  // sort the faces before rendering
+  void qsortFaces(int start, int end);
+  int qsortPartition(int start, int end);
+  void swapFaces(int i, int j);
+  int *mFacesToSort;
+
+  // sky shader	
+  ID3DXMesh* mSphere;
+  IDirect3DCubeTexture9* mEnvMap;
+  ID3DXEffect* mFX;
+  D3DXHANDLE mhTech;
+  D3DXHANDLE mhEnvMap;
+  D3DXHANDLE mhWVP;
+
 };
 
 #endif /* _RENDERER_H */

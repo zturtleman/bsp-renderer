@@ -36,452 +36,452 @@ BaseApp *gBaseApp;
 
 BaseApp::BaseApp(void)
 {
-	mFullScreen = false;
-	mPaused = false;
-	sprintf_s(fpsText, sizeof(fpsText), _T(""));		
+  mFullScreen = false;
+  mPaused = false;
+  sprintf_s(fpsText, sizeof(fpsText), _T(""));		
 
-	createWindow();
-	createDevice();
-	createFont();		
+  createWindow();
+  createDevice();
+  createFont();		
 }
 
 BaseApp::~BaseApp(void)
 {
-	ReleaseCOM(mFont);
-	ReleaseCOM(md3dDevice);
-	ReleaseCOM(md3dInterface);		
+  ReleaseCOM(mFont);
+  ReleaseCOM(md3dDevice);
+  ReleaseCOM(md3dInterface);		
 
-	DELETE_P(mDInput);	
-	DELETE_P(mRenderer);	
-	DELETE_P(mQ3Map);	
+  DELETE_P(mDInput);	
+  DELETE_P(mRenderer);	
+  DELETE_P(mQ3Map);	
 }
 
 LRESULT BaseApp::msgProc(UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	RECT rect = {0, 0, 0, 0};
+  RECT rect = {0, 0, 0, 0};
 
-	switch (msg)
-	{
-    case WM_KEYDOWN:
+  switch (msg)
+  {
+  case WM_KEYDOWN:
     {
-			switch (wParam)
-			{				
-				case VK_ESCAPE:
-					SendMessage( mhWinHandle, WM_CLOSE, 0, 0 );
-					break;
-        case VK_F1:
-          mRenderer->setCollMode(R_COLL_MODE_DISABLED);
-          break;
-        case VK_F3:
-          mRenderer->setCollMode(R_COLL_MODE_FULL);
-          break;
-        case VK_F8:			
-					switchFullScreen();
-					break;
-			}
+      switch (wParam)
+      {				
+      case VK_ESCAPE:
+        SendMessage( mhWinHandle, WM_CLOSE, 0, 0 );
+        break;
+      case VK_F1:
+        mRenderer->setCollMode(R_COLL_MODE_DISABLED);
+        break;
+      case VK_F3:
+        mRenderer->setCollMode(R_COLL_MODE_FULL);
+        break;
+      case VK_F8:			
+        switchFullScreen();
+        break;
+      }
     }
     break;
 
-    case WM_PAINT:
+  case WM_PAINT:
     {
       // is this needed? 
     }
     break;
 
-    case WM_SIZE:
-		{
-			if (md3dDevice != NULL)
-			{
-				md3dPP.BackBufferWidth  = LOWORD(lParam);
-				md3dPP.BackBufferHeight = HIWORD(lParam);
-				
-				if( wParam == SIZE_MINIMIZED )
-				{
-					mPaused = true;					
-				}
-				else if( wParam == SIZE_MAXIMIZED )
-				{
-					mPaused = false;
-					onLostDevice();
-					V(md3dDevice->Reset(&md3dPP));
-					onResetDevice();
-				}
-				else if( wParam == SIZE_RESTORED )
-				{					
-					mPaused = false;
-
-					if( md3dPP.Windowed )
-					{
-						onLostDevice();
-						V(md3dDevice->Reset(&md3dPP));
-						onResetDevice();
-					}
-				}
-			}
-    }
-		break;
-
-		case WM_ACTIVATE:
-		{
-			if( LOWORD(wParam) == WA_INACTIVE )
-			{
-				mPaused = true;
-			}
-			else
-			{
-				mPaused = false;
-			}
-    }
-		return 0;
-		
-		case WM_EXITSIZEMOVE:		
+  case WM_SIZE:
     {
-			GetClientRect(mhWinHandle, &rect);
-			md3dPP.BackBufferWidth  = rect.right;
-			md3dPP.BackBufferHeight = rect.bottom;
-			onLostDevice();
-			V(md3dDevice->Reset(&md3dPP));
-			onResetDevice();						
+      if (md3dDevice != NULL)
+      {
+        md3dPP.BackBufferWidth  = LOWORD(lParam);
+        md3dPP.BackBufferHeight = HIWORD(lParam);
+
+        if( wParam == SIZE_MINIMIZED )
+        {
+          mPaused = true;					
+        }
+        else if( wParam == SIZE_MAXIMIZED )
+        {
+          mPaused = false;
+          onLostDevice();
+          V(md3dDevice->Reset(&md3dPP));
+          onResetDevice();
+        }
+        else if( wParam == SIZE_RESTORED )
+        {					
+          mPaused = false;
+
+          if( md3dPP.Windowed )
+          {
+            onLostDevice();
+            V(md3dDevice->Reset(&md3dPP));
+            onResetDevice();
+          }
+        }
+      }
+    }
+    break;
+
+  case WM_ACTIVATE:
+    {
+      if( LOWORD(wParam) == WA_INACTIVE )
+      {
+        mPaused = true;
+      }
+      else
+      {
+        mPaused = false;
+      }
     }
     return 0;
 
-		case WM_CLOSE:
+  case WM_EXITSIZEMOVE:		
     {
-			DestroyWindow(mhWinHandle);			
+      GetClientRect(mhWinHandle, &rect);
+      md3dPP.BackBufferWidth  = rect.right;
+      md3dPP.BackBufferHeight = rect.bottom;
+      onLostDevice();
+      V(md3dDevice->Reset(&md3dPP));
+      onResetDevice();						
     }
     return 0;
 
-		case WM_DESTROY:
+  case WM_CLOSE:
     {
-			PostQuitMessage(0);			
+      DestroyWindow(mhWinHandle);			
+    }
+    return 0;
+
+  case WM_DESTROY:
+    {
+      PostQuitMessage(0);			
     }		
     return 0;
-	}
+  }
 
-	return ::DefWindowProc(mhWinHandle, msg, wParam, lParam);
+  return ::DefWindowProc(mhWinHandle, msg, wParam, lParam);
 }
 
 void BaseApp::createWindow(void)
 {
-	HINSTANCE hInstance = GetModuleHandle(0);	
-	WNDCLASS winclass;
+  HINSTANCE hInstance = GetModuleHandle(0);	
+  WNDCLASS winclass;
 
   winclass.lpszClassName = "bsp renderer";
   winclass.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
-	winclass.style         = CS_HREDRAW | CS_VREDRAW;
-	winclass.lpfnWndProc   = WinProc; 
-	winclass.cbClsExtra    = 0;
-	winclass.cbWndExtra    = 0;
-	winclass.hInstance     = hInstance;
-	winclass.hIcon         = LoadIcon(0, IDI_APPLICATION);
-	winclass.hCursor       = LoadCursor(0, IDC_ARROW);	
-	winclass.lpszMenuName  = 0;
-	
-	if (!RegisterClass(&winclass))
-	{
-		return;
-	}
+  winclass.style         = CS_HREDRAW | CS_VREDRAW;
+  winclass.lpfnWndProc   = WinProc; 
+  winclass.cbClsExtra    = 0;
+  winclass.cbWndExtra    = 0;
+  winclass.hInstance     = hInstance;
+  winclass.hIcon         = LoadIcon(0, IDI_APPLICATION);
+  winclass.hCursor       = LoadCursor(0, IDC_ARROW);	
+  winclass.lpszMenuName  = 0;
 
-	RECT rect = {0, 0, 800, 600};
+  if (!RegisterClass(&winclass))
+  {
+    return;
+  }
 
-	mhWinHandle = CreateWindow(
-					"bsp renderer",
-					"bsp renderer",
-					WS_EX_TOPMOST,//WS_OVERLAPPEDWINDOW, //WS_POPUP
-					0,
-					0,
-					rect.right,
-					rect.bottom,
-					0,
-					0,
-					hInstance,
-					0);
+  RECT rect = {0, 0, 800, 600};
 
-	if (mhWinHandle == 0)
-	{
-		cout << "window creation failed. exiting.\n";
-		Sleep(3000);
-		exit(0);
-	}
+  mhWinHandle = CreateWindow(
+    "bsp renderer",
+    "bsp renderer",
+    WS_EX_TOPMOST,//WS_OVERLAPPEDWINDOW, //WS_POPUP
+    0,
+    0,
+    rect.right,
+    rect.bottom,
+    0,
+    0,
+    hInstance,
+    0);
 
-	ShowWindow(mhWinHandle, SW_SHOW);
-	UpdateWindow(mhWinHandle);
+  if (mhWinHandle == 0)
+  {
+    cout << "window creation failed. exiting.\n";
+    Sleep(3000);
+    exit(0);
+  }
+
+  ShowWindow(mhWinHandle, SW_SHOW);
+  UpdateWindow(mhWinHandle);
 }
 
 int BaseApp::run(void)
 {
-	MSG  msg;
+  MSG  msg;
 
-	ZeroMemory(&msg, sizeof(MSG));
+  ZeroMemory(&msg, sizeof(MSG));
   msg.message = WM_NULL;
 
-	__int64 countsPerSec = 0;
-	QueryPerformanceFrequency((LARGE_INTEGER*)&countsPerSec);
-	float secsPerCount = 1.0f / (float)countsPerSec;
+  __int64 countsPerSec = 0;
+  QueryPerformanceFrequency((LARGE_INTEGER*)&countsPerSec);
+  float secsPerCount = 1.0f / (float)countsPerSec;
 
-	__int64 oldTimeStamp = 0;
-	QueryPerformanceCounter((LARGE_INTEGER*)&oldTimeStamp);
+  __int64 oldTimeStamp = 0;
+  QueryPerformanceCounter((LARGE_INTEGER*)&oldTimeStamp);
 
-	while(msg.message != WM_QUIT)
-	{
-	
-		if(PeekMessage( &msg, 0, 0, 0, PM_REMOVE ))
-		{
-        TranslateMessage( &msg );
-        DispatchMessage( &msg );
-		}	
-		else
+  while(msg.message != WM_QUIT)
+  {
+
+    if(PeekMessage( &msg, 0, 0, 0, PM_REMOVE ))
+    {
+      TranslateMessage( &msg );
+      DispatchMessage( &msg );
+    }	
+    else
     {	
-			if( mPaused )
-			{
-				Sleep(20);
-				continue;
-			}
+      if( mPaused )
+      {
+        Sleep(20);
+        continue;
+      }
 
-			if( !isDeviceLost() )
-			{
-				__int64 timeStamp = 0;
-				QueryPerformanceCounter((LARGE_INTEGER*)&timeStamp);
-				float delta = (timeStamp - oldTimeStamp)*secsPerCount;
+      if( !isDeviceLost() )
+      {
+        __int64 timeStamp = 0;
+        QueryPerformanceCounter((LARGE_INTEGER*)&timeStamp);
+        float delta = (timeStamp - oldTimeStamp)*secsPerCount;
 
-				updateScene(delta);
-				draw(delta);
+        updateScene(delta);
+        draw(delta);
 
-				oldTimeStamp = timeStamp;
-			}			
-		}
-	}
-	
-	return (int)msg.wParam;	
+        oldTimeStamp = timeStamp;
+      }			
+    }
+  }
+
+  return (int)msg.wParam;	
 }
 
 void BaseApp::createDevice(void)
 {
-	md3dInterface = Direct3DCreate9(D3D_SDK_VERSION);	
+  md3dInterface = Direct3DCreate9(D3D_SDK_VERSION);	
 
-	if (!md3dInterface)
-	{
-		return;
-	}
+  if (!md3dInterface)
+  {
+    return;
+  }
 
-	md3dPP.BackBufferFormat			      = D3DFMT_UNKNOWN;
-	md3dPP.BackBufferWidth			      = 0;
-	md3dPP.BackBufferHeight			      = 0;	
-	md3dPP.BackBufferCount            = 1;
-	md3dPP.MultiSampleType            = D3DMULTISAMPLE_NONE;
-	md3dPP.MultiSampleQuality         = 0;
-	md3dPP.SwapEffect                 = D3DSWAPEFFECT_DISCARD; 
-	md3dPP.hDeviceWindow              = mhWinHandle;
-	md3dPP.Windowed                   = true;
-	md3dPP.EnableAutoDepthStencil     = true; 
-	md3dPP.AutoDepthStencilFormat     = D3DFMT_D24S8;
-	md3dPP.Flags                      = 0;
-	md3dPP.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;
-	md3dPP.PresentationInterval       = D3DPRESENT_INTERVAL_DEFAULT;
-	//md3dPP.PresentationInterval       = D3DPRESENT_INTERVAL_IMMEDIATE;
+  md3dPP.BackBufferFormat			      = D3DFMT_UNKNOWN;
+  md3dPP.BackBufferWidth			      = 0;
+  md3dPP.BackBufferHeight			      = 0;	
+  md3dPP.BackBufferCount            = 1;
+  md3dPP.MultiSampleType            = D3DMULTISAMPLE_NONE;
+  md3dPP.MultiSampleQuality         = 0;
+  md3dPP.SwapEffect                 = D3DSWAPEFFECT_DISCARD; 
+  md3dPP.hDeviceWindow              = mhWinHandle;
+  md3dPP.Windowed                   = true;
+  md3dPP.EnableAutoDepthStencil     = true; 
+  md3dPP.AutoDepthStencilFormat     = D3DFMT_D24S8;
+  md3dPP.Flags                      = 0;
+  md3dPP.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;
+  md3dPP.PresentationInterval       = D3DPRESENT_INTERVAL_DEFAULT;
+  //md3dPP.PresentationInterval       = D3DPRESENT_INTERVAL_IMMEDIATE;
 
-	V(md3dInterface->CreateDevice(
-		D3DADAPTER_DEFAULT, 
-		D3DDEVTYPE_HAL,           
-		mhWinHandle,          
-		D3DCREATE_SOFTWARE_VERTEXPROCESSING,
-		//D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE,
-	    &md3dPP,            
-	    &md3dDevice));      
+  V(md3dInterface->CreateDevice(
+    D3DADAPTER_DEFAULT, 
+    D3DDEVTYPE_HAL,           
+    mhWinHandle,          
+    D3DCREATE_SOFTWARE_VERTEXPROCESSING,
+    //D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE,
+    &md3dPP,            
+    &md3dDevice));      
 
 
 }
 
 void BaseApp::createFont(void)
 {
-	TCHAR               strFont[32];	
-	strcpy_s(strFont, 32, _T("Arial"));
+  TCHAR               strFont[32];	
+  strcpy_s(strFont, 32, _T("Arial"));
 
-	HDC hDC = GetDC( NULL );
-    int nLogPixelsY = GetDeviceCaps(hDC, LOGPIXELSY);
-    ReleaseDC( NULL, hDC );
+  HDC hDC = GetDC( NULL );
+  int nLogPixelsY = GetDeviceCaps(hDC, LOGPIXELSY);
+  ReleaseDC( NULL, hDC );
 
-    int nHeight = -0 * nLogPixelsY / 72;
-    V(D3DXCreateFont( md3dDevice,            
-                         nHeight,            
-                         0,                  
-                         FW_BOLD,            
-                         1,                  
-                         FALSE,              
-                         DEFAULT_CHARSET,    
-                         OUT_DEFAULT_PRECIS, 
-                         DEFAULT_QUALITY,    
-                         DEFAULT_PITCH | FF_DONTCARE, 
-                         strFont,              
-                         &mFont));             	
+  int nHeight = -0 * nLogPixelsY / 72;
+  V(D3DXCreateFont( md3dDevice,            
+    nHeight,            
+    0,                  
+    FW_BOLD,            
+    1,                  
+    FALSE,              
+    DEFAULT_CHARSET,    
+    OUT_DEFAULT_PRECIS, 
+    DEFAULT_QUALITY,    
+    DEFAULT_PITCH | FF_DONTCARE, 
+    strFont,              
+    &mFont));             	
 }
 
 void BaseApp::updateScene(const float dt)
 {		
-	mDInput->poll();	
+  mDInput->poll();	
 
-	mRenderer->update(dt);	
+  mRenderer->update(dt);	
 }
 
 void BaseApp::draw(float dt)
 {	
-	// Clear the render target and the zbuffer 
+  // Clear the render target and the zbuffer 
   V( md3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(0, 20, 20, 20), 1.0f, 0) );
 
   // Render the scene
   if( SUCCEEDED( md3dDevice->BeginScene() ) )
   {		
-	  mRenderer->draw();
+    mRenderer->draw();
 
-	  // draw the fps counter
-	  RECT rc;
-	  SetRect( &rc, 0, 0 , 50, 50 );        
-	  updateFpsCounter(dt);
-	  mFont->DrawText( NULL, fpsText, -1, &rc, DT_NOCLIP, D3DXCOLOR( 0.5f, 0.5f, 0.5f, 1.0f ));
+    // draw the fps counter
+    RECT rc;
+    SetRect( &rc, 0, 0 , 50, 50 );        
+    updateFpsCounter(dt);
+    mFont->DrawText( NULL, fpsText, -1, &rc, DT_NOCLIP, D3DXCOLOR( 0.5f, 0.5f, 0.5f, 1.0f ));
 
     V(md3dDevice->EndScene());		
 
-	  // present the buffer
-	  V(md3dDevice->Present(0, 0, 0, 0));
+    // present the buffer
+    V(md3dDevice->Present(0, 0, 0, 0));
   }
 }
 
 void BaseApp::onLostDevice(void)
 {
-	SUCCEEDED(mFont->OnLostDevice());
-	mRenderer->onLostDevice();
+  SUCCEEDED(mFont->OnLostDevice());
+  mRenderer->onLostDevice();
 }
 
 void BaseApp::onResetDevice(void)
 {
-	SUCCEEDED(mFont->OnResetDevice());
+  SUCCEEDED(mFont->OnResetDevice());
 
-	mRenderer->onResetDevice(&md3dPP);
+  mRenderer->onResetDevice(&md3dPP);
 
-	mRenderer->setupState();
+  mRenderer->setupState();
 }
 
 void BaseApp::switchFullScreen(void)
 {
-	if (mFullScreen)
-	{
-		RECT rect = {0, 0, 800, 600};
-		AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, false);
-		md3dPP.BackBufferFormat = D3DFMT_UNKNOWN;
-		md3dPP.BackBufferWidth  = 800;
-		md3dPP.BackBufferHeight = 600;
-		md3dPP.Windowed         = true;		
+  if (mFullScreen)
+  {
+    RECT rect = {0, 0, 800, 600};
+    AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, false);
+    md3dPP.BackBufferFormat = D3DFMT_UNKNOWN;
+    md3dPP.BackBufferWidth  = 800;
+    md3dPP.BackBufferHeight = 600;
+    md3dPP.Windowed         = true;		
 
-		SetWindowLongPtr(mhWinHandle, GWL_STYLE, WS_OVERLAPPEDWINDOW);
+    SetWindowLongPtr(mhWinHandle, GWL_STYLE, WS_OVERLAPPEDWINDOW);
 
-		SetWindowPos(mhWinHandle, HWND_TOP, 100, 100, rect.right, rect.bottom, SWP_NOZORDER | SWP_SHOWWINDOW);
+    SetWindowPos(mhWinHandle, HWND_TOP, 100, 100, rect.right, rect.bottom, SWP_NOZORDER | SWP_SHOWWINDOW);
 
-		mFullScreen = false;
-	}
-	else
-	{		
-		int width  = GetSystemMetrics(SM_CXSCREEN);
-		int height = GetSystemMetrics(SM_CYSCREEN);
+    mFullScreen = false;
+  }
+  else
+  {		
+    int width  = GetSystemMetrics(SM_CXSCREEN);
+    int height = GetSystemMetrics(SM_CYSCREEN);
 
-		md3dPP.BackBufferFormat = D3DFMT_A8R8G8B8;
-		md3dPP.BackBufferWidth  = width;
-		md3dPP.BackBufferHeight = height;
-		md3dPP.Windowed         = false;
+    md3dPP.BackBufferFormat = D3DFMT_A8R8G8B8;
+    md3dPP.BackBufferWidth  = width;
+    md3dPP.BackBufferHeight = height;
+    md3dPP.Windowed         = false;
 
-		SetWindowLongPtr(mhWinHandle, GWL_STYLE, WS_POPUP);
+    SetWindowLongPtr(mhWinHandle, GWL_STYLE, WS_POPUP);
 
-		SetWindowPos(mhWinHandle, HWND_TOP, 0, 0, width, height, SWP_NOZORDER | SWP_SHOWWINDOW);	
+    SetWindowPos(mhWinHandle, HWND_TOP, 0, 0, width, height, SWP_NOZORDER | SWP_SHOWWINDOW);	
 
-		mFullScreen = true;
-	}
+    mFullScreen = true;
+  }
 
-	onLostDevice();
-	V(md3dDevice->Reset(&md3dPP));
-	onResetDevice();
+  onLostDevice();
+  V(md3dDevice->Reset(&md3dPP));
+  onResetDevice();
 }
 
 bool BaseApp::isDeviceLost()
 {	
-	HRESULT hr = md3dDevice->TestCooperativeLevel();
+  HRESULT hr = md3dDevice->TestCooperativeLevel();
 
-	if( hr == D3DERR_DEVICELOST )
-	{
-		Sleep(20);
-		return true;
-	}
-	else if( hr == D3DERR_DRIVERINTERNALERROR )
-	{		
-		PostQuitMessage(0);
-		return true;
-	}	
-	else if( hr == D3DERR_DEVICENOTRESET )
-	{
-		onLostDevice();
-		V(md3dDevice->Reset(&md3dPP));
-		onResetDevice();
-		return false;
-	}
-	else
+  if( hr == D3DERR_DEVICELOST )
   {
-		return false;
+    Sleep(20);
+    return true;
+  }
+  else if( hr == D3DERR_DRIVERINTERNALERROR )
+  {		
+    PostQuitMessage(0);
+    return true;
+  }	
+  else if( hr == D3DERR_DEVICENOTRESET )
+  {
+    onLostDevice();
+    V(md3dDevice->Reset(&md3dPP));
+    onResetDevice();
+    return false;
+  }
+  else
+  {
+    return false;
   }
 }
 
 void BaseApp::initDInput(void)
 {
-	mDInput = new DInput(DISCL_NONEXCLUSIVE|DISCL_FOREGROUND, DISCL_NONEXCLUSIVE|DISCL_FOREGROUND, mhWinHandle);
+  mDInput = new DInput(DISCL_NONEXCLUSIVE|DISCL_FOREGROUND, DISCL_NONEXCLUSIVE|DISCL_FOREGROUND, mhWinHandle);
 
-	if (mDInput == NULL)
-	{
-		cout << "failed to create direct input object. exiting.\n";
-		SendMessage( mhWinHandle, WM_CLOSE, 0, 0 );
-	}
+  if (mDInput == NULL)
+  {
+    cout << "failed to create direct input object. exiting.\n";
+    SendMessage( mhWinHandle, WM_CLOSE, 0, 0 );
+  }
 }
 
 void BaseApp::initRenderer(string cfgFile)
 {
-	mRenderer = new Renderer();
-	mQ3Map = new Q3Map();
-	
-	mQ3Map->loadMap(cfgFile);
+  mRenderer = new Renderer();
+  mQ3Map = new Q3Map();
 
-	mRenderer->setMap(mQ3Map);
-	mRenderer->setDXDevice(md3dDevice);
-	mRenderer->initRenderer();
-	mRenderer->setDInput(mDInput);
-	//mRenderer->createSkyFX();
+  mQ3Map->loadMap(cfgFile);
 
-	onResetDevice();	
+  mRenderer->setMap(mQ3Map);
+  mRenderer->setDXDevice(md3dDevice);
+  mRenderer->initRenderer();
+  mRenderer->setDInput(mDInput);
+  //mRenderer->createSkyFX();
+
+  onResetDevice();	
 }
 
 void BaseApp::updateFpsCounter(const float dt)
 {	
-	static float frameCounter   = 0.0f;
-	static float timeCounter    = 0.0f;
-	float framespersecond;
-	
-	frameCounter += 1.0f;	
-	timeCounter  += dt;
+  static float frameCounter   = 0.0f;
+  static float timeCounter    = 0.0f;
+  float framespersecond;
 
-	if( timeCounter >= 1.0f )
-	{
-		framespersecond = frameCounter / timeCounter;
+  frameCounter += 1.0f;	
+  timeCounter  += dt;
 
-		timeCounter    = 0.0f;
-		frameCounter   = 0.0f;
+  if( timeCounter >= 1.0f )
+  {
+    framespersecond = frameCounter / timeCounter;
 
-		sprintf_s(fpsText, sizeof(fpsText), _T("no collision detection\nfps: %.2f"), framespersecond);
-	}	
+    timeCounter    = 0.0f;
+    frameCounter   = 0.0f;
+
+    sprintf_s(fpsText, sizeof(fpsText), _T("no collision detection\nfps: %.2f"), framespersecond);
+  }	
 }
 
 LRESULT CALLBACK BaseApp::WinProc (HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	if (gBaseApp != NULL)
-	{
-		return gBaseApp->msgProc(msg, wParam, lParam);
-	}
-	else
-	{
-		return ::DefWindowProc(hwnd, msg, wParam, lParam);
-	}
+  if (gBaseApp != NULL)
+  {
+    return gBaseApp->msgProc(msg, wParam, lParam);
+  }
+  else
+  {
+    return ::DefWindowProc(hwnd, msg, wParam, lParam);
+  }
 }

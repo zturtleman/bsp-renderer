@@ -31,20 +31,20 @@ along with bsp-renderer.  If not, see <http://www.gnu.org/licenses/>.
 using namespace std;
 
 typedef struct {
-	string dirName;
-	ZZIP_DIR* dir;
+  string dirName;
+  ZZIP_DIR* dir;
 } dir_t;
 
 class ZipHandler 
 {
 public:
-	bool openDir(string dirName);
-	bool extractFile(string fileName, string outputName, bool ignoreSuffix);
-	bool closeDir(string dirName);
+  bool openDir(string dirName);
+  bool extractFile(string fileName, string outputName, bool ignoreSuffix);
+  bool closeDir(string dirName);
 
 private:
-	//ZZIP_DIR* dir;
-	vector<dir_t> dirs;
+  //ZZIP_DIR* dir;
+  vector<dir_t> dirs;
 
 };
 

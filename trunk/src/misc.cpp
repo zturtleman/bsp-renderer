@@ -25,8 +25,8 @@ along with bsp-renderer.  If not, see <http://www.gnu.org/licenses/>.
 
 void exitFunction(string reason)
 {
-	cerr << "\n" << reason << "\n";
-	cerr << "exiting\n";
-	Sleep(3000);
-	exit(1);
+  cerr << "\n" << reason << "\n";
+  cerr << "exiting\n";
+  Sleep(3000);
+  exit(1);
 }
