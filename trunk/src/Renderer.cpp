@@ -22,7 +22,7 @@ along with bsp-renderer.  If not, see <http://www.gnu.org/licenses/>.
 // Renderer.cpp -- the heart of the application, handles the drawing of the map
 
 #include "Renderer.h"
-#include "Camera.h"
+#include "FpsCamera.h"
 #include "ZipHandler.h"
 #include "Q3Map.h"
 #include "BspVertex.h"
@@ -45,7 +45,7 @@ static unsigned int GetColour (unsigned int a, unsigned int r, unsigned int g, u
 
 Renderer::Renderer()
 {
-	mCamera = new Camera();
+	mFpsCamera = new FpsCamera();
 	mViewFrustum = new ViewFrustum();
 	mCollision = new Collision();
 
@@ -62,9 +62,9 @@ Renderer::Renderer()
 
 Renderer::~Renderer()
 {
-	DestroyAllVertexDeclarations();
+	DeleteVertexDecl();
 
-	DELETE_P(mCamera);
+	DELETE_P(mFpsCamera);
 	DELETE_P(mViewFrustum);	
 	DELETE_P(mCollision);
 
@@ -86,14 +86,14 @@ Renderer::~Renderer()
 	DELETE_ARRAY(mD3DTextures);
 	DELETE_ARRAY(mTextureLightMaps);
 
-	ReleaseCOM(mSphere);
-	ReleaseCOM(mEnvMap);	
+//	ReleaseCOM(mSphere);
+//	ReleaseCOM(mEnvMap);	
 }
 
 void Renderer::setDInput(DInput *DInput)
 {
 	mDInput = DInput;
-	mCamera->setDInput(DInput);
+	mFpsCamera->setDInput(DInput);
 }
 
 void Renderer::setDXDevice(IDirect3DDevice9* d3dDevice)
@@ -103,9 +103,9 @@ void Renderer::setDXDevice(IDirect3DDevice9* d3dDevice)
 
 void Renderer::update(const float dt)
 {				
-	mCamera->update(dt);
+	mFpsCamera->update(dt);
 	
-	mNumFacesToRender = mQ3Map->findVisibleFaces(mCamera->position(), mFacesToRender);
+	mNumFacesToRender = mQ3Map->findVisibleFaces(mFpsCamera->position(), mFacesToRender);
 }
 
 void Renderer::draw(void)
@@ -118,8 +118,8 @@ void Renderer::draw(void)
 	D3DXMATRIX W;
 	D3DXMatrixIdentity(&W);
 	V(md3dDevice->SetTransform(D3DTS_WORLD, &W));
-	V(md3dDevice->SetTransform(D3DTS_VIEW, &mCamera->view()));
-	V(md3dDevice->SetTransform(D3DTS_PROJECTION, &mCamera->projection()));	
+	V(md3dDevice->SetTransform(D3DTS_VIEW, &mFpsCamera->view()));
+	V(md3dDevice->SetTransform(D3DTS_PROJECTION, &mFpsCamera->projection()));	
 	
 	mFacesToSort = mFacesToRender;
 	qsortFaces(0,  mNumFacesToRender - 1);
@@ -135,7 +135,7 @@ void Renderer::draw(void)
 		faceIndex++;
 	}			
 	
-	drawSky();
+	//drawSky();
 }
 
 void Renderer::setMap(Q3Map *q3Map)
@@ -151,8 +151,8 @@ void Renderer::initRenderer(void)
 
 	//InitAllVertexDeclarations(md3dDevice);
 
-	mCamera->setViewFrustum(mViewFrustum);
-	mCamera->setCollision(mCollision);
+	mFpsCamera->setViewFrustum(mViewFrustum);
+	mFpsCamera->setCollision(mCollision);
 	mQ3Map->setViewFrustum(mViewFrustum);
 	mCollision->setMap(mQ3Map);
 
@@ -517,7 +517,7 @@ void Renderer::onResetDevice(D3DPRESENT_PARAMETERS *md3dPP)
 	// possibly change after a reset.  So rebuild the projection matrix.
 	float w = (float)md3dPP->BackBufferWidth;
 	float h = (float)md3dPP->BackBufferHeight;
-	mCamera->setLens(D3DX_PI * 0.25f, w/h, 1.0f, 5000.0f, h, w);		
+	mFpsCamera->setLens(D3DX_PI * 0.25f, w/h, 1.0f, 5000.0f, h, w);		
 
 	mSetStreamAndIndices = true;
 	mSetStreamAndIndices2 = true;
@@ -661,7 +661,7 @@ void Renderer::drawSky(void)
 	V(md3dDevice->SetFVF(VertexFVFSky));
 
 	D3DXMATRIX view, view2;
-	view = mCamera->view();
+	view = mFpsCamera->view();
 	view2 = view;
 	view2(3,0) = 0.0f;
 	view2(3,1) = 0.0f;
@@ -700,5 +700,5 @@ void Renderer::resetState()
 
 void Renderer::setCollMode(int mode)
 {
-  mCamera->setCollMode(mode);
+  mFpsCamera->setCollMode(mode);
 }

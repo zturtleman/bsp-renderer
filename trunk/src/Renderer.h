@@ -26,7 +26,7 @@ along with bsp-renderer.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <vector>
 
-#include "Camera.h"
+#include "FpsCamera.h"
 #include "Q3Map.h"
 #include "Bezier.h"
 #include "misc.h"
@@ -85,7 +85,7 @@ private:
 	void drawSky(void);
 	void resetState(void);
 
-	Camera *mCamera;
+	FpsCamera *mFpsCamera;
 	DInput *mDInput;
 	IDirect3DDevice9* md3dDevice;
 	ViewFrustum *mViewFrustum;
