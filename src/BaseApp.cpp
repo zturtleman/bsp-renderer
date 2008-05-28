@@ -82,6 +82,12 @@ LRESULT BaseApp::msgProc(UINT msg, WPARAM wParam, LPARAM lParam)
     }
     break;
 
+    case WM_PAINT:
+    {
+      // is this needed? 
+    }
+    break;
+
     case WM_SIZE:
 		{
 			if (md3dDevice != NULL)
@@ -181,7 +187,7 @@ void BaseApp::createWindow(void)
 	mhWinHandle = CreateWindow(
 					"bsp renderer",
 					"bsp renderer",
-					WS_OVERLAPPEDWINDOW, //WS_POPUP
+					WS_EX_TOPMOST,//WS_OVERLAPPEDWINDOW, //WS_POPUP
 					0,
 					0,
 					rect.right,
@@ -443,7 +449,7 @@ void BaseApp::initRenderer(string cfgFile)
 	mRenderer->setDXDevice(md3dDevice);
 	mRenderer->initRenderer();
 	mRenderer->setDInput(mDInput);
-	mRenderer->createSkyFX();
+	//mRenderer->createSkyFX();
 
 	onResetDevice();	
 }

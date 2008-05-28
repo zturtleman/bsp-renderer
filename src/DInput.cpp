@@ -33,9 +33,17 @@ DInput::DInput(DWORD keyboardFlags, DWORD mouseFlags, HWND hwnd)
 
 	V(DirectInput8Create(
         hInstance, DIRECTINPUT_VERSION, 
-		    IID_IDirectInput8, (void**)&mDInput, 0));
+		    IID_IDirectInput8, (void**)&mDInput, NULL));
 
-	V(mDInput->CreateDevice(GUID_SysKeyboard, &mKeyboardDevice, 0));
+  HRESULT hr;
+
+	hr = mDInput->CreateDevice(GUID_SysKeyboard, &mKeyboardDevice, 0);
+  if (FAILED(hr))
+  {
+    //DInput_Exit();
+    return;
+  }
+
 	V(mKeyboardDevice->SetDataFormat(&c_dfDIKeyboard));
 	V(mKeyboardDevice->SetCooperativeLevel(hwnd, keyboardFlags));
 	V(mKeyboardDevice->Acquire());

@@ -419,7 +419,7 @@ int Q3Map::findVisibleFaces(const D3DXVECTOR3 *camPos, int *facesToRender)
 	{
 		if (isClusterVisible(visCluster, m_pLeafs[i].cluster))
 		{									
-			bool vis = mViewFrustum->isBoxInside(m_pLeafs[i].mins, m_pLeafs[i].maxs);						
+			bool vis = mViewFrustum->checkIfBoxInside(m_pLeafs[i].mins, m_pLeafs[i].maxs);						
 			if (vis)
 			{
 				for (int k=0; k < m_pLeafs[i].n_leaffaces; k++)

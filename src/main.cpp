@@ -20,7 +20,7 @@ along with bsp-renderer.  If not, see <http://www.gnu.org/licenses/>.
 */
 // main.cpp -- start up the engine
 
-#include "Engine.h"
+#include "BaseApp.h"
 #include <iostream>
 
 using namespace std;
@@ -34,13 +34,13 @@ int main(void)
 		_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 	#endif
 
-	Engine e;
-	gEngine = &e;	
+	BaseApp e;
+	gBaseApp = &e;	
 
-	gEngine->initDInput();
-	gEngine->initRenderer("../media/bsp.cfg");
+	gBaseApp->initDInput();
+	gBaseApp->initRenderer("../../../media/bsp.cfg");
 
-	gEngine->run();
+	gBaseApp->run();
 
 	return 0;
 }

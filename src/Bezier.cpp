@@ -28,7 +28,7 @@ along with bsp-renderer.  If not, see <http://www.gnu.org/licenses/>.
    Paul Baker's Octagon project,
    http://www.paulsprojects.net/opengl/octagon/octagon.html
    which is released under the New BSD license.
-   Please see the license folder.
+   Please see the licenses folder.
 */
  
 #include "Bezier.h"
