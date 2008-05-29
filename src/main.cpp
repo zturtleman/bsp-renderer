@@ -38,7 +38,7 @@ int main(void)
   gBaseApp = &e;	
 
   gBaseApp->initDInput();
-  gBaseApp->initRenderer("../../../media/bsp.cfg");
+  gBaseApp->initRenderer("bsp.cfg");
 
   gBaseApp->run();
 
