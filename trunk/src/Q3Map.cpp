@@ -74,44 +74,52 @@ void Q3Map::loadMap(string cfgFile)
 
   if (!mapFile) 
   {
-    cerr << "Unable to open file " << cfgFile << "\n";
-    exit(1);   // call system to stop
+    cout << "Unable to open file " << cfgFile << "\n";    
   }
-
-  string str;
-
-  const int tmp_length = 150;
-  char tmp[tmp_length];
-
-  // todo: clean up the parsing
-  while (mapFile >> str) 
+  else
   {
-    if (str == "#")
+    string str;
+
+    const int tmp_length = 150;
+    char tmp[tmp_length];
+
+    // todo: clean up the parsing
+    while (mapFile >> str) 
     {
-      mapFile.getline(tmp,sizeof(tmp));
-    }
-    else if (str == "pk3:")
-    {	
-      do
+      if (str == "#")
       {
-        mapFile.read(tmp, 1);
+        mapFile.getline(tmp,sizeof(tmp));
       }
-      while (tmp[0] == ' ' && tmp[0]!= '\n');
+      else if (str == "pk3:")
+      {	
+        do
+        {
+          mapFile.read(tmp, 1);
+        }
+        while (tmp[0] == ' ' && tmp[0]!= '\n');
 
-      mapFile.unget();
-      mapFile.getline(tmp, sizeof(tmp));
+        mapFile.unget();
+        mapFile.getline(tmp, sizeof(tmp));
 
-      pk3Files.push_back(tmp);			
-      cout << "pk3 file: " << tmp << "\n" ; 
+        pk3Files.push_back(tmp);			
+        cout << "pk3 file: " << tmp << "\n" ; 
+      }
+      else if(str == "map:")
+      {
+        mapFile >> mapName;
+        cout << "map: " << mapName << "\n";
+      }
     }
-    else if(str == "map:")
-    {
-      mapFile >> mapName;
-      cout << "map: " << mapName << "\n";
-    }
+
+    mapFile.close();	
   }
 
-  mapFile.close();	
+  /* If no pk3 file name is found, use the default */
+  if (pk3Files.size() == 0)
+  {
+    pk3Files.push_back("maps/jof3dm2/jof3dm2.pk3");
+    mapName = "maps/jof3dm2.bsp";
+  }
 
   initMap();
 }
