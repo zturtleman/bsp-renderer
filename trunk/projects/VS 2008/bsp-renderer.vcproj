@@ -18,7 +18,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)\exe\"
+			OutputDirectory="..\..\bin"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="1"
@@ -94,7 +94,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="..\..\bin"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="1"
@@ -117,11 +117,19 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
+				Optimization="3"
+				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="true"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
-				RuntimeLibrary="2"
-				EnableFunctionLevelLinking="true"
+				FavorSizeOrSpeed="1"
+				EnableFiberSafeOptimizations="true"
+				AdditionalIncludeDirectories="..\..\external_libs\zziplib\include"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;$(NOINHERIT)"
+				StringPooling="true"
+				RuntimeLibrary="0"
+				BufferSecurityCheck="false"
+				EnableFunctionLevelLinking="false"
+				FloatingPointModel="2"
+				RuntimeTypeInfo="false"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
@@ -137,9 +145,13 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="zziplib.lib dxerr.lib dxguid.lib d3dx9.lib d3d9.lib dinput8.lib"
+				OutputFile="$(OutDir)\$(ProjectName)_release.exe"
 				LinkIncremental="1"
-				GenerateDebugInformation="true"
-				SubSystem="2"
+				AdditionalLibraryDirectories="..\..\external_libs\zziplib\lib"
+				IgnoreDefaultLibraryNames="libc.lib; msvcrt.lib; libcd.lib; libcmtd.lib; msvcrtd.lib"
+				GenerateDebugInformation="false"
+				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				TargetMachine="1"
