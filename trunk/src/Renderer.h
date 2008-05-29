@@ -57,21 +57,15 @@ public:
 private:	
 
   typedef struct{
-    int texture;
-    //int effect;
+    int texture;    
     int type;
     int vertex;
     int n_vertexes;
     int meshvert;
     int n_meshverts;
     int n_triangles;
-    int lm_index;
-    //int lm_start[2];
-    //int lm_size[2];
-    //float lm_origin[3];
-    //float lm_vecs[2][3];
-    float normal[3];
-    //int size[2];		
+    int lm_index;    
+    float normal[3];    
     Q3BspPatch *patch;
   } Q3BspFaceRenderer;
 
@@ -120,14 +114,9 @@ private:
   void swapFaces(int i, int j);
   int *mFacesToSort;
 
-  // sky shader	
+  // sky box
   ID3DXMesh* mSphere;
-  IDirect3DCubeTexture9* mEnvMap;
-  ID3DXEffect* mFX;
-  D3DXHANDLE mhTech;
-  D3DXHANDLE mhEnvMap;
-  D3DXHANDLE mhWVP;
-
+  IDirect3DCubeTexture9* mEnvMap;  
 };
 
 #endif /* _RENDERER_H */

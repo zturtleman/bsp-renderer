@@ -111,8 +111,7 @@ void Renderer::update(const float dt)
 void Renderer::draw(void)
 {		
   resetOptimisationVars();
-  resetState();
-  //setupState();
+  resetState();  
 
   // World matrix is identity.
   D3DXMATRIX W;
@@ -145,7 +144,7 @@ void Renderer::setMap(Q3Map *q3Map)
 
 void Renderer::initRenderer(void)
 {
-  mFacesToRender = new int[mQ3Map->m_iNumFaces + 1]; // why +1 ?
+  mFacesToRender = new int[mQ3Map->m_iNumFaces + 1]; 
 
   initFaces();	
 
@@ -506,7 +505,7 @@ void Renderer::drawFace(int faceIndex)
     V(md3dDevice->DrawIndexedPrimitive(
       D3DPT_TRIANGLELIST, 
       mBspFaces[faceIndex].vertex, 
-      0,//mBspFaces[faceIndex].vertex, //0, 
+      0,
       mBspFaces[faceIndex].n_vertexes,
       mBspFaces[faceIndex].meshvert,
       mBspFaces[faceIndex].n_triangles));						
@@ -534,7 +533,7 @@ void Renderer::drawFace(int faceIndex)
         V(md3dDevice->DrawIndexedPrimitive(
           D3DPT_TRIANGLESTRIP,
           mBspFaces[faceIndex].patch->bezier[i].mBaseVertexIndex,//0,
-          0,//mBspFaces[faceIndex].patch->bezier[i].mBaseVertexIndex,//0,
+          0,
           (UINT)mBspFaces[faceIndex].patch->bezier[i].mNumVertex,
           mBspFaces[faceIndex].patch->bezier[i].mRowIndex[j] + mBspFaces[faceIndex].patch->bezier[i].mBaseBufferindex,
           mBspFaces[faceIndex].patch->bezier[i].mTrianglesPerRow[j]-2)); 

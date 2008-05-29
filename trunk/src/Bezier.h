@@ -31,15 +31,14 @@ class Bezier
 public:
   Bezier();
   ~Bezier();
-
-  BspVertex mControls[9];
+  
   void tessellate(int level);
 
+  BspVertex mControls[9];
   BspVertex *mVertex;
   unsigned int *mIndex;
   unsigned int *mTrianglesPerRow;
   unsigned int *mRowIndex;
-
   unsigned int mNumIndex;
   unsigned int mNumVertex;
   int mBaseBufferindex;

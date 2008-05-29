@@ -26,6 +26,7 @@ along with bsp-renderer.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <d3dx9.h>
 
+// vertex structure for when there is no shader support
 struct LVertex
 {
   LVertex(float _x, float _y, float _z, 

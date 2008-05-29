@@ -155,8 +155,7 @@ public:
 private:
 
   void parseMap(void);
-  void initMap();	
-  //void handlePatches(void);
+  void initMap();	  
 
   void swizzleCoords(void);
   void swizzleFloat3(float t[3]);

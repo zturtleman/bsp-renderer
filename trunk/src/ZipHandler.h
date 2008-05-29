@@ -42,8 +42,7 @@ public:
   bool extractFile(string fileName, string outputName, bool ignoreSuffix);
   bool closeDir(string dirName);
 
-private:
-  //ZZIP_DIR* dir;
+private:  
   vector<dir_t> dirs;
 
 };
