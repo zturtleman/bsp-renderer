@@ -86,8 +86,8 @@ Renderer::~Renderer()
   DELETE_ARRAY(mD3DTextures);
   DELETE_ARRAY(mTextureLightMaps);
 
-  //	ReleaseCOM(mSphere);
-  //	ReleaseCOM(mEnvMap);	
+	ReleaseCOM(mSphere);
+	ReleaseCOM(mEnvMap);	
 }
 
 void Renderer::setDInput(DInput *DInput)
@@ -229,10 +229,17 @@ void Renderer::buildIndexBuffer(void)
 {		 	
   DEBUG_OUTPUT("total nr of meshverts: " << mQ3Map->m_iNumMeshVerts);
 
+  DWORD usage;
+#ifdef NO_SHADERS
+  usage = D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY | D3DUSAGE_SOFTWAREPROCESSING;
+#else
+  usage = D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY;
+#endif
+
   // Obtain a pointer to a new index buffer.
   V(md3dDevice->CreateIndexBuffer(
     (UINT)(mQ3Map->m_iNumMeshVerts * sizeof(unsigned short)),		
-    D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY | D3DUSAGE_SOFTWAREPROCESSING,
+    usage,
     D3DFMT_INDEX16,
     D3DPOOL_DEFAULT,
     &mIB,
@@ -256,15 +263,19 @@ void Renderer::buildIndexBuffer(void)
 void Renderer::buildVertexBuffer(void)
 {
   // Obtain a pointer to a new vertex buffer.
+  UINT vbLength;
+  DWORD usage;
 #ifdef NO_SHADERS
-  UINT vbLength = mQ3Map->m_iNumVertices * sizeof(LVertex);
+  vbLength = mQ3Map->m_iNumVertices * sizeof(LVertex);
+  usage = D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY | D3DUSAGE_SOFTWAREPROCESSING;
 #else
-  UINT vbLength = mQ3Map->m_iNumVertices * sizeof(VertexPNTL);
+  vbLength = mQ3Map->m_iNumVertices * sizeof(VertexPNTL);
+  usage = D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY;
 #endif
 
   V(md3dDevice->CreateVertexBuffer(
     vbLength,    
-    D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY | D3DUSAGE_SOFTWAREPROCESSING,
+    usage,
     VertexFVF,
     D3DPOOL_DEFAULT,
     &mVB,
@@ -340,26 +351,37 @@ void Renderer::buildPatchBuffers(void)
       return;
 
     // create index buffer		
+    DWORD usage;
+#ifdef NO_SHADERS
+    usage = D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY | D3DUSAGE_SOFTWAREPROCESSING;
+#else
+    usage = D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY;
+#endif
     V(md3dDevice->CreateIndexBuffer(
       (UINT)numIndex * sizeof(unsigned short),
-      D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY | D3DUSAGE_SOFTWAREPROCESSING,
+      usage,
       D3DFMT_INDEX16,
       D3DPOOL_DEFAULT,
       &mBezIB,
       0));
 
     // create vertex buffer
+    UINT vbLength;
+    DWORD FVF;
+
 #ifdef NO_SHADERS
-    UINT vbLength = numVertex * sizeof(LVertex);
-    DWORD FVF = VertexFVF;
+    vbLength = numVertex * sizeof(LVertex);
+    FVF = VertexFVF;
+    usage = D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY | D3DUSAGE_SOFTWAREPROCESSING;
 #else
-    UINT vbLength = numVertex * sizeof(VertexPNTL);
-    DWORD FVF = 0;
+    vbLength = numVertex * sizeof(VertexPNTL);
+    FVF = 0;
+    usage = D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY;
 #endif
 
     V(md3dDevice->CreateVertexBuffer(
       vbLength,
-      D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY | D3DUSAGE_SOFTWAREPROCESSING,
+      usage,
       FVF,
       D3DPOOL_DEFAULT,
       &mBezVB,
