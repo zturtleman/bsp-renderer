@@ -156,7 +156,7 @@ LRESULT BaseApp::msgProc(UINT msg, WPARAM wParam, LPARAM lParam)
       PostQuitMessage(0);			
     }		
     return 0;
-  }
+	}
 
   return ::DefWindowProc(mhWinHandle, msg, wParam, lParam);
 }
@@ -280,12 +280,18 @@ void BaseApp::createDevice(void)
   md3dPP.PresentationInterval       = D3DPRESENT_INTERVAL_DEFAULT;
   //md3dPP.PresentationInterval       = D3DPRESENT_INTERVAL_IMMEDIATE;
 
+  DWORD flags;
+#ifdef NO_SHADERS
+    flags = D3DCREATE_SOFTWARE_VERTEXPROCESSING;
+#else
+    flags = D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE;
+#endif
+
   V(md3dInterface->CreateDevice(
     D3DADAPTER_DEFAULT, 
     D3DDEVTYPE_HAL,           
     mhWinHandle,          
-    D3DCREATE_SOFTWARE_VERTEXPROCESSING,
-    //D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE,
+    flags,
     &md3dPP,            
     &md3dDevice));      
 
@@ -326,7 +332,7 @@ void BaseApp::updateScene(const float dt)
 void BaseApp::draw(float dt)
 {	
   // Clear the render target and the zbuffer 
-  V( md3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(0, 20, 20, 20), 1.0f, 0) );
+  V( md3dDevice->Clear(0, NULL, /* D3DCLEAR_TARGET | */ D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(0, 20, 20, 20), 1.0f, 0) );
 
   // Render the scene
   if( SUCCEEDED( md3dDevice->BeginScene() ) )
@@ -449,7 +455,7 @@ void BaseApp::initRenderer(string cfgFile)
   mRenderer->setDXDevice(md3dDevice);
   mRenderer->initRenderer();
   mRenderer->setDInput(mDInput);
-  //mRenderer->createSkyFX();
+  mRenderer->createSkyFX();
 
   onResetDevice();	
 }
