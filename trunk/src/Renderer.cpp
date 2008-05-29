@@ -135,7 +135,7 @@ void Renderer::draw(void)
     faceIndex++;
   }			
 
-  //drawSky();
+  drawSky();
 }
 
 void Renderer::setMap(Q3Map *q3Map)
@@ -149,7 +149,9 @@ void Renderer::initRenderer(void)
 
   initFaces();	
 
-  //InitAllVertexDeclarations(md3dDevice);
+#ifndef NO_SHADERS
+  InitVertexDecl(md3dDevice);
+#endif
 
   mFpsCamera->setViewFrustum(mViewFrustum);
   mFpsCamera->setCollision(mCollision);
@@ -254,9 +256,14 @@ void Renderer::buildIndexBuffer(void)
 void Renderer::buildVertexBuffer(void)
 {
   // Obtain a pointer to a new vertex buffer.
+#ifdef NO_SHADERS
+  UINT vbLength = mQ3Map->m_iNumVertices * sizeof(LVertex);
+#else
+  UINT vbLength = mQ3Map->m_iNumVertices * sizeof(VertexPNTL);
+#endif
+
   V(md3dDevice->CreateVertexBuffer(
-    //mQ3Map->m_iNumVertices * sizeof(VertexPNTL),
-    mQ3Map->m_iNumVertices * sizeof(LVertex),		
+    vbLength,    
     D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY | D3DUSAGE_SOFTWAREPROCESSING,
     VertexFVF,
     D3DPOOL_DEFAULT,
@@ -266,28 +273,41 @@ void Renderer::buildVertexBuffer(void)
   // Now lock it to obtain a pointer to its internal data, and write the
   // cube's vertex data.
 
-  //VertexPNTL* v = 0;
+#ifdef NO_SHADERS
   LVertex* v = 0;
+#else
+  VertexPNTL* v = 0;
+#endif
+    
   V(mVB->Lock(0, 0, (void**)&v, 0));
 
   Q3BspVertex *vertices = mQ3Map->m_pVertices;
 
   for (int k = 0; k < mQ3Map->m_iNumVertices; k++)
   {		
-    v[k] = LVertex(vertices[k].position[0], vertices[k].position[1], vertices[k].position[2],
-      vertices[k].normal[0], vertices[k].normal[1], vertices[k].normal[2],
-      vertices[k].texcoord[0][0], vertices[k].texcoord[0][1],
-      vertices[k].texcoord[1][0], vertices[k].texcoord[1][1]);
-    /*v[k].x = vertices[k].position[0];
-    v[k].y = vertices[k].position[1];
-    v[k].z = vertices[k].position[2];
-    v[k].nx = vertices[k].normal[0];
-    v[k].ny = vertices[k].normal[1];
-    v[k].nz = vertices[k].normal[2];
-    v[k].tu = vertices[k].texcoord[0][0];
-    v[k].tv = vertices[k].texcoord[0][1];
-    v[k].ltu = vertices[k].texcoord[1][0];
-    v[k].ltv = vertices[k].texcoord[1][1];*/
+#ifdef NO_SHADERS
+    v[k] = LVertex(vertices[k].position[0], 
+                   vertices[k].position[1],
+                   vertices[k].position[2],
+                   vertices[k].normal[0],
+                   vertices[k].normal[1],
+                   vertices[k].normal[2],
+                   vertices[k].texcoord[0][0],
+                   vertices[k].texcoord[0][1],
+                   vertices[k].texcoord[1][0],
+                   vertices[k].texcoord[1][1]);
+#else
+    v[k] = VertexPNTL(vertices[k].position[0], 
+                   vertices[k].position[1],
+                   vertices[k].position[2],
+                   vertices[k].normal[0],
+                   vertices[k].normal[1],
+                   vertices[k].normal[2],
+                   vertices[k].texcoord[0][0],
+                   vertices[k].texcoord[0][1],
+                   vertices[k].texcoord[1][0],
+                   vertices[k].texcoord[1][1]);
+#endif
   }
 
   V(mVB->Unlock());
@@ -329,10 +349,18 @@ void Renderer::buildPatchBuffers(void)
       0));
 
     // create vertex buffer
+#ifdef NO_SHADERS
+    UINT vbLength = numVertex * sizeof(LVertex);
+    DWORD FVF = VertexFVF;
+#else
+    UINT vbLength = numVertex * sizeof(VertexPNTL);
+    DWORD FVF = 0;
+#endif
+
     V(md3dDevice->CreateVertexBuffer(
-      numVertex * sizeof(LVertex),//(UINT)mBspFaces[faceIndex].patch->bezier[i].mNumVertex * sizeof(VertexPNTL),
+      vbLength,
       D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY | D3DUSAGE_SOFTWAREPROCESSING,
-      VertexFVF,
+      FVF,
       D3DPOOL_DEFAULT,
       &mBezVB,
       0));
@@ -341,7 +369,11 @@ void Renderer::buildPatchBuffers(void)
     V(mBezIB->Lock(0, 0, (void**)&k, D3DLOCK_DISCARD ));		
     int indexBufferindex = 0;
 
+#ifdef NO_SHADERS
     LVertex* v = 0;	
+#else
+    VertexPNTL* v = 0; 
+#endif
     V(mBezVB->Lock(0, 0, (void**)&v, D3DLOCK_DISCARD));		
     int vertexBufferindex = 0;
 
@@ -367,6 +399,7 @@ void Renderer::buildPatchBuffers(void)
             for (unsigned int vertex=0; vertex < patch->bezier[bezierIndex].mNumVertex; vertex++)
             {
               BspVertex *bspVertex = &patch->bezier[bezierIndex].mVertex[vertex];
+#ifdef NO_SHADERS
               v[vertexBufferindex] = LVertex(
                 //position									  
                 bspVertex->mPosition[0],
@@ -382,6 +415,23 @@ void Renderer::buildPatchBuffers(void)
                 // lightmap coordinates
                 bspVertex->mTexcoord[1][0],
                 bspVertex->mTexcoord[1][1]);
+#else
+              v[vertexBufferindex] = VertexPNTL(
+                //position									  
+                bspVertex->mPosition[0],
+                bspVertex->mPosition[1],
+                bspVertex->mPosition[2],
+                // normal
+                bspVertex->mNormal[0],
+                bspVertex->mNormal[1],
+                bspVertex->mNormal[2],
+                // texture coordinates									  
+                bspVertex->mTexcoord[0][0],
+                bspVertex->mTexcoord[0][1],
+                // lightmap coordinates
+                bspVertex->mTexcoord[1][0],
+                bspVertex->mTexcoord[1][1]);
+#endif
               vertexBufferindex++;
             }
           }
@@ -419,7 +469,11 @@ void Renderer::drawFace(int faceIndex)
   case POLYGON:		
     if (mSetStreamAndIndices)
     {			
+#ifdef NO_SHADERS
       V(md3dDevice->SetStreamSource(0, mVB, 0, sizeof(LVertex)));
+#else
+      V(md3dDevice->SetStreamSource(0, mVB, 0, sizeof(VertexPNTL)));
+#endif
       V(md3dDevice->SetIndices(mIB));
 
       mSetStreamAndIndices = false;
@@ -441,7 +495,11 @@ void Renderer::drawFace(int faceIndex)
 
     if (mSetStreamAndIndices2)
     {
+#ifdef NO_SHADERS
       V(md3dDevice->SetStreamSource(0, mBezVB, 0, sizeof(LVertex)));
+#else
+      V(md3dDevice->SetStreamSource(0, mBezVB, 0, sizeof(VertexPNTL)));
+#endif
       V(md3dDevice->SetIndices(mBezIB));		
       mSetStreamAndIndices2 = false;
     }
@@ -471,16 +529,18 @@ void Renderer::drawFace(int faceIndex)
 }
 
 void Renderer::setupState(void)
-{	
-
-  //V(md3dDevice->SetRenderState(D3DRS_CLIPPING , FALSE ));
+{	  
   V(md3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE ));
 
   V(md3dDevice->SetRenderState( D3DRS_ZENABLE, D3DZB_TRUE));	
 
   V(md3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CW));
-  //V(md3dDevice->SetVertexDeclaration(VertexPNTL::Decl));		
-  V(md3dDevice->SetFVF(VertexFVF));
+
+#ifdef NO_SHADERS
+  V(md3dDevice->SetFVF(VertexFVF));  
+#else
+  V(md3dDevice->SetVertexDeclaration(VertexPNTL::Decl));		
+#endif
 
   V(md3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, TEXTURE_QUALITY)); 
   V(md3dDevice->SetSamplerState(0, D3DSAMP_MINFILTER, TEXTURE_QUALITY)); 
@@ -632,7 +692,7 @@ void Renderer::createSkyFX(void)
   V(D3DXCreateSphere(md3dDevice, skyRadius, 3, 3, &mSphere, 0));		
   V(D3DXCreateCubeTextureFromFileEx(
     md3dDevice,
-    _T("../media/grassenvmap1024.dds"),
+    _T("media/sky3.dds"),
     D3DX_DEFAULT,
     1,
     0,
@@ -648,7 +708,7 @@ void Renderer::createSkyFX(void)
 
 void Renderer::drawSky(void)
 {
-#define SKY_TEXTURE_QUALITY D3DTEXF_POINT	
+#define SKY_TEXTURE_QUALITY D3DTEXF_ANISOTROPIC
   V(md3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, SKY_TEXTURE_QUALITY)); 
   V(md3dDevice->SetSamplerState(0, D3DSAMP_MINFILTER, SKY_TEXTURE_QUALITY)); 
   V(md3dDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, SKY_TEXTURE_QUALITY));		
@@ -657,9 +717,13 @@ void Renderer::drawSky(void)
   V(md3dDevice->SetTextureStageState( 1, D3DTSS_ALPHAOP,  D3DTOP_DISABLE ));		
 
   D3DXMATRIX matEnvironmentAdjust;
-  //V(md3dDevice->SetVertexDeclaration(VertexPT::Decl));	
-  V(md3dDevice->SetFVF(VertexFVFSky));
 
+#ifdef NO_SHADERS
+  V(md3dDevice->SetFVF(VertexFVFSky));
+#else
+  V(md3dDevice->SetVertexDeclaration(VertexPT::Decl));	
+#endif
+  
   D3DXMATRIX view, view2;
   view = mFpsCamera->view();
   view2 = view;
@@ -684,9 +748,12 @@ void Renderer::drawSky(void)
 
 void Renderer::resetState()
 {
-  //V(md3dDevice->SetVertexDeclaration(VertexPNTL::Decl));		
+#ifdef NO_SHADERS
   V(md3dDevice->SetFVF(VertexFVF));
-
+#else
+  V(md3dDevice->SetVertexDeclaration(VertexPNTL::Decl));		
+#endif
+  
   V(md3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, TEXTURE_QUALITY)); 
   V(md3dDevice->SetSamplerState(0, D3DSAMP_MINFILTER, TEXTURE_QUALITY)); 
   V(md3dDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, TEXTURE_QUALITY));
