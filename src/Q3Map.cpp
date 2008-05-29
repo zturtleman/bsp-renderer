@@ -53,9 +53,7 @@ Q3Map::~Q3Map()
   {
     DELETE_P(m_VisData->vecs);
     DELETE_P(m_VisData);
-  }
-  //DELETE_P(m_pVisibleFaces);		
-  //DELETE_P(m_pFacesToRender);		
+  }  
   DELETE_P(m_pBrushes);
   DELETE_P(m_pLeafBrushes);
   DELETE_P(m_pBrushSides);
@@ -129,10 +127,7 @@ void Q3Map::parseMap()
   ZipHandler zip;
 
   if (!zip.openDir(pk3Files[0]))
-    exitFunction("pk3 file not found");
-
-  //if (!zip.openDir(pk3Files[1]))
-  //exitFunction("pk3 file not found");
+    exitFunction("pk3 file not found");  
 
   if (!zip.extractFile(mapName, _T("map.bsp"), false))
     exitFunction("map file not found");
@@ -215,25 +210,12 @@ void Q3Map::parseMap()
   mapFile.seekg(m_BspHeader.Lumps[Faces].iOffset, ios::beg);
   mapFile.read((char*) m_pFaces, m_BspHeader.Lumps[Faces].iLength);//sizeof( Q3BspFace_t ) * m_iNumFaces);
 
-  /*for (int i = 0; i < m_iNumFaces; i++)			
-  DEBUG_OUTPUT("face: " << i << ", index of first vertex " << m_pFaces[i].vertex );
-  */
   mapFile.seekg(m_BspHeader.Lumps[Vertices].iOffset);
   mapFile.read((char*) m_pVertices, m_BspHeader.Lumps[Vertices].iLength);
-
-  /*DEBUG_OUTPUT("num vertices: " << m_iNumVertices);
-  for (int i=0; i<m_iNumVertices; i++)
-  DEBUG_OUTPUT(i << ":" << m_pVertices[i].position[0]
-  << ", " << m_pVertices[i].position[1]
-  << ", " << m_pVertices[i].position[2]);*/
-
+  
   mapFile.seekg(m_BspHeader.Lumps[MeshVerts].iOffset);
   mapFile.read((char*) m_pMeshVerts, m_BspHeader.Lumps[MeshVerts].iLength);
-
-  /*DEBUG_OUTPUT("num meshverts: " << m_iNumMeshVerts);
-  for (int i=0; i<m_iNumMeshVerts; i++)
-  DEBUG_OUTPUT(i << ":" << m_pMeshVerts[i]);*/
-
+  
   mapFile.seekg(m_BspHeader.Lumps[Leafs].iOffset);
   mapFile.read((char*) m_pLeafs, m_BspHeader.Lumps[Leafs].iLength);
 
@@ -260,10 +242,6 @@ void Q3Map::parseMap()
   mapFile.seekg(m_BspHeader.Lumps[Nodes].iOffset);
   mapFile.read((char*) m_pNodes, m_BspHeader.Lumps[Nodes].iLength);	
 
-  /*for (int i = 0; i < m_iNumNodes; i++)
-  DEBUG_OUTPUT("node: " << i << ", first child " << m_pNodes[i].children[0] << 
-  ", second child " << m_pNodes[i].children[1]);
-  */
   mapFile.seekg(m_BspHeader.Lumps[LightMaps].iOffset);
   mapFile.read((char*) m_pLightMaps, m_BspHeader.Lumps[LightMaps].iLength);
 
@@ -394,14 +372,18 @@ Q3BspPatch *Q3Map::handlePatch(int faceIndex)
           m_pFaces[faceIndex].size[0] * j +
           pos].normal);
 
-        q3patch->bezier[patchIndex].mControls[index++] = BspVertex(m_pVertices[m_pFaces[faceIndex].vertex + ii + m_pFaces[faceIndex].size[0] * j + pos + 1].position,
-          m_pVertices[m_pFaces[faceIndex].vertex + ii + m_pFaces[faceIndex].size[0] * j + pos + 1].texcoord,
-          m_pVertices[m_pFaces[faceIndex].vertex + ii + m_pFaces[faceIndex].size[0] * j + pos + 1].normal);
-        q3patch->bezier[patchIndex].mControls[index++] = BspVertex(m_pVertices[m_pFaces[faceIndex].vertex + ii + m_pFaces[faceIndex].size[0] * j + pos + 2].position,
-          m_pVertices[m_pFaces[faceIndex].vertex + ii + m_pFaces[faceIndex].size[0] * j + pos + 2].texcoord,
-          m_pVertices[m_pFaces[faceIndex].vertex + ii + m_pFaces[faceIndex].size[0] * j + pos + 2].normal);						
-      }
-      //q3patch->bezier[patchIndex].faceIndex = face;
+        q3patch->bezier[patchIndex].mControls[index++] = 
+                BspVertex(
+                  m_pVertices[m_pFaces[faceIndex].vertex + ii + m_pFaces[faceIndex].size[0] * j + pos + 1].position,
+                  m_pVertices[m_pFaces[faceIndex].vertex + ii + m_pFaces[faceIndex].size[0] * j + pos + 1].texcoord,
+                  m_pVertices[m_pFaces[faceIndex].vertex + ii + m_pFaces[faceIndex].size[0] * j + pos + 1].normal);
+
+        q3patch->bezier[patchIndex].mControls[index++] = 
+                BspVertex(
+                  m_pVertices[m_pFaces[faceIndex].vertex + ii + m_pFaces[faceIndex].size[0] * j + pos + 2].position,
+                  m_pVertices[m_pFaces[faceIndex].vertex + ii + m_pFaces[faceIndex].size[0] * j + pos + 2].texcoord,
+                  m_pVertices[m_pFaces[faceIndex].vertex + ii + m_pFaces[faceIndex].size[0] * j + pos + 2].normal);						
+      }      
       q3patch->bezier[patchIndex].tessellate(5);
       patchIndex++;
     }

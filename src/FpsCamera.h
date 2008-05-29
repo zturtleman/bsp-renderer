@@ -41,7 +41,6 @@ public:
   void setDInput(DInput *DInput);		
   void setViewFrustum(ViewFrustum *viewFrustum);
   void setCollision(Collision *collision);
-
   void setCollMode(int mode);
 
   const D3DXMATRIX& view() const;
@@ -71,9 +70,7 @@ private:
   int mCollMode;
 
   DInput *mDInput;	
-
   ViewFrustum *mViewFrustum;
-
   Collision *mCollision;
 };
 

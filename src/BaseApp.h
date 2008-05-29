@@ -43,8 +43,8 @@ public:
 
   BaseApp(void);
   ~BaseApp(void);	
-  int run(void);
 
+  int run(void);
   void initDInput(void);
   void initRenderer(string cfgFile);
 

@@ -58,104 +58,83 @@ BaseApp::~BaseApp(void)
 
 LRESULT BaseApp::msgProc(UINT msg, WPARAM wParam, LPARAM lParam)
 {
-  RECT rect = {0, 0, 0, 0};
+	RECT clientRect = {0, 0, 0, 0};
 
-  switch (msg)
-  {
-  case WM_KEYDOWN:
-    {
-      switch (wParam)
-      {				
-      case VK_ESCAPE:
-        SendMessage( mhWinHandle, WM_CLOSE, 0, 0 );
-        break;
-      case VK_F1:
-        mRenderer->setCollMode(R_COLL_MODE_DISABLED);
-        break;
-      case VK_F3:
-        mRenderer->setCollMode(R_COLL_MODE_FULL);
-        break;
-      case VK_F8:			
-        switchFullScreen();
-        break;
-      }
-    }
-    break;
+	switch (msg)
+	{
+		case WM_ACTIVATE:
+			if( LOWORD(wParam) == WA_INACTIVE )
+				mPaused = true;
+			else
+				mPaused = false;
+			return 0;
 
-  case WM_PAINT:
-    {
-      // is this needed? 
-    }
-    break;
+		case WM_SIZE:				
+			if (md3dDevice)
+			{
+				md3dPP.BackBufferWidth  = LOWORD(lParam);
+				md3dPP.BackBufferHeight = HIWORD(lParam);
+				
+				if( wParam == SIZE_MINIMIZED )
+				{
+					mPaused = true;					
+				}
+				else if( wParam == SIZE_MAXIMIZED )
+				{
+					mPaused = false;
+					onLostDevice();
+					V(md3dDevice->Reset(&md3dPP));
+					onResetDevice();
+				}
+				else if( wParam == SIZE_RESTORED )
+				{					
+					mPaused = false;
 
-  case WM_SIZE:
-    {
-      if (md3dDevice != NULL)
-      {
-        md3dPP.BackBufferWidth  = LOWORD(lParam);
-        md3dPP.BackBufferHeight = HIWORD(lParam);
+					if( md3dPP.Windowed )
+					{
+						onLostDevice();
+						V(md3dDevice->Reset(&md3dPP));
+						onResetDevice();
+					}
+				}
+			}
+			break;
 
-        if( wParam == SIZE_MINIMIZED )
-        {
-          mPaused = true;					
-        }
-        else if( wParam == SIZE_MAXIMIZED )
-        {
-          mPaused = false;
-          onLostDevice();
-          V(md3dDevice->Reset(&md3dPP));
-          onResetDevice();
-        }
-        else if( wParam == SIZE_RESTORED )
-        {					
-          mPaused = false;
+		case WM_EXITSIZEMOVE:			
+			GetClientRect(mhWinHandle, &clientRect);
+			md3dPP.BackBufferWidth  = clientRect.right;
+			md3dPP.BackBufferHeight = clientRect.bottom;
+			onLostDevice();
+			V(md3dDevice->Reset(&md3dPP));
+			onResetDevice();
+			
+			return 0;
 
-          if( md3dPP.Windowed )
-          {
-            onLostDevice();
-            V(md3dDevice->Reset(&md3dPP));
-            onResetDevice();
-          }
-        }
-      }
-    }
-    break;
+		case WM_CLOSE:
+			DestroyWindow(mhWinHandle);
+			return 0;
 
-  case WM_ACTIVATE:
-    {
-      if( LOWORD(wParam) == WA_INACTIVE )
-      {
-        mPaused = true;
-      }
-      else
-      {
-        mPaused = false;
-      }
-    }
-    return 0;
+		case WM_DESTROY:
+			PostQuitMessage(0);
+			return 0;
 
-  case WM_EXITSIZEMOVE:		
-    {
-      GetClientRect(mhWinHandle, &rect);
-      md3dPP.BackBufferWidth  = rect.right;
-      md3dPP.BackBufferHeight = rect.bottom;
-      onLostDevice();
-      V(md3dDevice->Reset(&md3dPP));
-      onResetDevice();						
-    }
-    return 0;
-
-  case WM_CLOSE:
-    {
-      DestroyWindow(mhWinHandle);			
-    }
-    return 0;
-
-  case WM_DESTROY:
-    {
-      PostQuitMessage(0);			
-    }		
-    return 0;
+		case WM_KEYDOWN:
+			switch (wParam)
+			{				
+				case VK_ESCAPE:
+					SendMessage( mhWinHandle, WM_CLOSE, 0, 0 );
+					break;
+        case VK_F1:
+          mRenderer->setCollMode(R_COLL_MODE_DISABLED);
+          break;
+        case VK_F3:
+          mRenderer->setCollMode(R_COLL_MODE_FULL);
+          break;
+        case VK_F8:			
+					switchFullScreen();
+					break;
+			}
+			
 	}
 
   return ::DefWindowProc(mhWinHandle, msg, wParam, lParam);
@@ -187,7 +166,7 @@ void BaseApp::createWindow(void)
   mhWinHandle = CreateWindow(
     "bsp renderer",
     "bsp renderer",
-    WS_EX_TOPMOST,//WS_OVERLAPPEDWINDOW, //WS_POPUP
+    WS_EX_TOPMOST,
     0,
     0,
     rect.right,
