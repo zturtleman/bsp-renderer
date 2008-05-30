@@ -17,3 +17,5 @@ Add your content here.  Format your content with:
 [http://code.google.com/p/bsp-renderer/source/browse/wiki/screenshot.jpeg]
 
 http://www.google.com
+
+http://code.google.com/p/bsp-renderer/source/browse/wiki/screenshot.jpeg?r=60
