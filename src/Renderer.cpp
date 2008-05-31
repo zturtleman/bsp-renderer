@@ -264,18 +264,22 @@ void Renderer::buildVertexBuffer(void)
   // Obtain a pointer to a new vertex buffer.
   UINT vbLength;
   DWORD usage;
+  DWORD FVF;
+
 #ifdef NO_SHADERS
   vbLength = mQ3Map->m_iNumVertices * sizeof(LVertex);
   usage = D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY | D3DUSAGE_SOFTWAREPROCESSING;
+  FVF = VertexFVF;
 #else
   vbLength = mQ3Map->m_iNumVertices * sizeof(VertexPNTL);
   usage = D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY;
+  FVF = 0;
 #endif
 
   V(md3dDevice->CreateVertexBuffer(
     vbLength,    
     usage,
-    VertexFVF,
+    FVF,
     D3DPOOL_DEFAULT,
     &mVB,
     0));
@@ -710,10 +714,16 @@ void Renderer::createSkyFX(void)
 {
   float skyRadius = 4500.0f;
 
+#ifndef RELEASE_BUILD
+  string skyFile = "../../media/skies/sky3.dds";
+#else
+  string skyFile = "../media/skies/sky3.dds";
+#endif
+
   V(D3DXCreateSphere(md3dDevice, skyRadius, 3, 3, &mSphere, 0));		
   V(D3DXCreateCubeTextureFromFileEx(
     md3dDevice,
-    _T("media/sky3.dds"),
+    _T(skyFile.c_str()),
     D3DX_DEFAULT,
     1,
     0,

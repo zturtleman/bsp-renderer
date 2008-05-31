@@ -115,7 +115,11 @@ void Q3Map::loadMap(string cfgFile)
   /* If no pk3 file name is found, use the default */
   if (pk3Files.size() == 0)
   {
-    pk3Files.push_back("maps/jof3dm2/jof3dm2.pk3");
+#ifndef RELEASE_BUILD
+    pk3Files.push_back("../../media/maps/jof3dm2/jof3dm2.pk3");
+#else
+    pk3Files.push_back("../media/maps/jof3dm2/jof3dm2.pk3");
+#endif
     mapName = "maps/jof3dm2.bsp";
   }
 

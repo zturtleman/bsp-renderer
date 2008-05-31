@@ -263,11 +263,38 @@ void BaseApp::createDevice(void)
   md3dPP.PresentationInterval       = D3DPRESENT_INTERVAL_DEFAULT;
   //md3dPP.PresentationInterval       = D3DPRESENT_INTERVAL_IMMEDIATE;
 
-  DWORD flags;
-#ifdef NO_SHADERS
-    flags = D3DCREATE_SOFTWARE_VERTEXPROCESSING;
-#else
+  /*if ((caps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT) &&
+      (caps.DevCaps & D3DCREATE_PUREDEVICE))
+  {
     flags = D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE;
+  }
+  else
+  {
+    flags = D3DCREATE_SOFTWARE_VERTEXPROCESSING;
+  }*/
+
+  DWORD flags;
+  D3DCAPS9 caps;
+  V(md3dInterface->GetDeviceCaps(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, &caps));
+  
+#ifdef NO_SHADERS
+  flags = D3DCREATE_SOFTWARE_VERTEXPROCESSING;
+#else
+  flags = D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE;
+#endif
+
+#ifndef NO_SHADERS
+  if (!(caps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT) ||
+      !(caps.DevCaps & D3DCREATE_PUREDEVICE))
+  {
+    cout << "NO_SHADERS is not defined, and the program \n";
+    cout << "is running on a computer without HW vertex processing.\n";
+    cout << "Define NO_SHADERS and recompile, or \n";
+    cout << "run the appropriate executable.\n";
+    cout << "Exiting in 20 seconds.\n";
+    Sleep(20000);
+    exit(0);
+  }
 #endif
 
   V(md3dInterface->CreateDevice(
@@ -276,9 +303,7 @@ void BaseApp::createDevice(void)
     mhWinHandle,          
     flags,
     &md3dPP,            
-    &md3dDevice));      
-
-
+    &md3dDevice));
 }
 
 void BaseApp::createFont(void)
