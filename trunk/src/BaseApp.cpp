@@ -59,9 +59,13 @@ BaseApp::~BaseApp(void)
 LRESULT BaseApp::msgProc(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	RECT clientRect = {0, 0, 0, 0};
-
+  
 	switch (msg)
 	{
+    case WM_SETCURSOR:            
+      SetCursor( NULL ); // Turn off the mouse cursor.                 
+      return 0;
+
 		case WM_ACTIVATE:
 			if( LOWORD(wParam) == WA_INACTIVE )
 				mPaused = true;
@@ -166,7 +170,7 @@ void BaseApp::createWindow(void)
   mhWinHandle = CreateWindow(
     "bsp renderer",
     "bsp renderer",
-    WS_EX_TOPMOST,
+    WS_OVERLAPPED,
     0,
     0,
     rect.right,
@@ -377,7 +381,7 @@ void BaseApp::switchFullScreen(void)
 
     SetWindowPos(mhWinHandle, HWND_TOP, 0, 0, width, height, SWP_NOZORDER | SWP_SHOWWINDOW);	
 
-    mFullScreen = true;
+    mFullScreen = true;    
   }
 
   onLostDevice();
