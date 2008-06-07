@@ -148,7 +148,7 @@ void Renderer::initRenderer(void)
 
   initFaces();	
 
-#ifndef NO_SHADERS
+#ifndef NO_HW_VERTEXPROCESSING
   InitVertexDecl(md3dDevice);
 #endif
 
@@ -229,7 +229,7 @@ void Renderer::buildIndexBuffer(void)
   DEBUG_OUTPUT("total nr of meshverts: " << mQ3Map->m_iNumMeshVerts);
 
   DWORD usage;
-#ifdef NO_SHADERS
+#ifdef NO_HW_VERTEXPROCESSING
   usage = D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY | D3DUSAGE_SOFTWAREPROCESSING;
 #else
   usage = D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY;
@@ -266,7 +266,7 @@ void Renderer::buildVertexBuffer(void)
   DWORD usage;
   DWORD FVF;
 
-#ifdef NO_SHADERS
+#ifdef NO_HW_VERTEXPROCESSING
   vbLength = mQ3Map->m_iNumVertices * sizeof(LVertex);
   usage = D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY | D3DUSAGE_SOFTWAREPROCESSING;
   FVF = VertexFVF;
@@ -287,7 +287,7 @@ void Renderer::buildVertexBuffer(void)
   // Now lock it to obtain a pointer to its internal data, and write the
   // cube's vertex data.
 
-#ifdef NO_SHADERS
+#ifdef NO_HW_VERTEXPROCESSING
   LVertex* v = 0;
 #else
   VertexPNTL* v = 0;
@@ -299,7 +299,7 @@ void Renderer::buildVertexBuffer(void)
 
   for (int k = 0; k < mQ3Map->m_iNumVertices; k++)
   {		
-#ifdef NO_SHADERS
+#ifdef NO_HW_VERTEXPROCESSING
     v[k] = LVertex(vertices[k].position[0], 
                    vertices[k].position[1],
                    vertices[k].position[2],
@@ -355,7 +355,7 @@ void Renderer::buildPatchBuffers(void)
 
     // create index buffer		
     DWORD usage;
-#ifdef NO_SHADERS
+#ifdef NO_HW_VERTEXPROCESSING
     usage = D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY | D3DUSAGE_SOFTWAREPROCESSING;
 #else
     usage = D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY;
@@ -372,7 +372,7 @@ void Renderer::buildPatchBuffers(void)
     UINT vbLength;
     DWORD FVF;
 
-#ifdef NO_SHADERS
+#ifdef NO_HW_VERTEXPROCESSING
     vbLength = numVertex * sizeof(LVertex);
     FVF = VertexFVF;
     usage = D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY | D3DUSAGE_SOFTWAREPROCESSING;
@@ -394,7 +394,7 @@ void Renderer::buildPatchBuffers(void)
     V(mBezIB->Lock(0, 0, (void**)&k, D3DLOCK_DISCARD ));		
     int indexBufferindex = 0;
 
-#ifdef NO_SHADERS
+#ifdef NO_HW_VERTEXPROCESSING
     LVertex* v = 0;	
 #else
     VertexPNTL* v = 0; 
@@ -424,7 +424,7 @@ void Renderer::buildPatchBuffers(void)
             for (unsigned int vertex=0; vertex < patch->bezier[bezierIndex].mNumVertex; vertex++)
             {
               BspVertex *bspVertex = &patch->bezier[bezierIndex].mVertex[vertex];
-#ifdef NO_SHADERS
+#ifdef NO_HW_VERTEXPROCESSING
               v[vertexBufferindex] = LVertex(
                 //position									  
                 bspVertex->mPosition[0],
@@ -494,7 +494,7 @@ void Renderer::drawFace(int faceIndex)
   case POLYGON:		
     if (mSetStreamAndIndices)
     {			
-#ifdef NO_SHADERS
+#ifdef NO_HW_VERTEXPROCESSING
       V(md3dDevice->SetStreamSource(0, mVB, 0, sizeof(LVertex)));
 #else
       V(md3dDevice->SetStreamSource(0, mVB, 0, sizeof(VertexPNTL)));
@@ -520,7 +520,7 @@ void Renderer::drawFace(int faceIndex)
 
     if (mSetStreamAndIndices2)
     {
-#ifdef NO_SHADERS
+#ifdef NO_HW_VERTEXPROCESSING
       V(md3dDevice->SetStreamSource(0, mBezVB, 0, sizeof(LVertex)));
 #else
       V(md3dDevice->SetStreamSource(0, mBezVB, 0, sizeof(VertexPNTL)));
@@ -561,7 +561,7 @@ void Renderer::setupState(void)
 
   V(md3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CW));
 
-#ifdef NO_SHADERS
+#ifdef NO_HW_VERTEXPROCESSING
   V(md3dDevice->SetFVF(VertexFVF));  
 #else
   V(md3dDevice->SetVertexDeclaration(VertexPNTL::Decl));		
@@ -749,7 +749,7 @@ void Renderer::drawSky(void)
 
   D3DXMATRIX matEnvironmentAdjust;
 
-#ifdef NO_SHADERS
+#ifdef NO_HW_VERTEXPROCESSING
   V(md3dDevice->SetFVF(VertexFVFSky));
 #else
   V(md3dDevice->SetVertexDeclaration(VertexPT::Decl));	
@@ -779,7 +779,7 @@ void Renderer::drawSky(void)
 
 void Renderer::resetState()
 {
-#ifdef NO_SHADERS
+#ifdef NO_HW_VERTEXPROCESSING
   V(md3dDevice->SetFVF(VertexFVF));
 #else
   V(md3dDevice->SetVertexDeclaration(VertexPNTL::Decl));		
@@ -798,5 +798,21 @@ void Renderer::resetState()
 
 void Renderer::setCollMode(int mode)
 {
+  switch(mode)
+  {
+    case R_COLL_MODE_DISABLED:
+      mode = COLL_MODE_DISABLED;
+      break;
+    case R_COLL_MODE_NO_GRAVITY:
+      mode = COLL_MODE_NO_GRAVITY;
+      break;
+    case R_COLL_MODE_GRAVITY:
+      mode = COLL_MODE_GRAVITY;
+      break;
+    default:
+      mode = COLL_MODE_DISABLED;
+      break;
+  }
+
   mFpsCamera->setCollMode(mode);
 }

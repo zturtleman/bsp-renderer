@@ -67,7 +67,9 @@ private:
   IDirect3DDevice9* md3dDevice;
   D3DPRESENT_PARAMETERS md3dPP;
   ID3DXFont*          mFont;
-  TCHAR fpsText[45];
+  TCHAR mFpsText[15];
+  TCHAR mCollText[36];
+  D3DXCOLOR mFontColor;
   bool mFullScreen;
   bool mPaused;
   DInput *mDInput;
