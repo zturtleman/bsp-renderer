@@ -8,3 +8,5 @@ Overview of the application
 = Details =
 
 bsp-renderer is written is C++ and it uses DirectX for graphics, hence it runs only on Windows at the moment.
+
+http://code.google.com/p/bsp-renderer/source/browse/trunk/README.html
