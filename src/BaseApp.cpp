@@ -38,7 +38,9 @@ BaseApp::BaseApp(void)
 {
   mFullScreen = false;
   mPaused = false;
-  sprintf_s(fpsText, sizeof(fpsText), _T(""));		
+  sprintf_s(mFpsText, sizeof(mFpsText), _T(""));	
+  sprintf_s(mCollText, sizeof(mFpsText), _T(""));	
+  mFontColor = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
 
   createWindow();
   createDevice();
@@ -130,15 +132,20 @@ LRESULT BaseApp::msgProc(UINT msg, WPARAM wParam, LPARAM lParam)
 					break;
         case VK_F1:
           mRenderer->setCollMode(R_COLL_MODE_DISABLED);
+          sprintf_s(mCollText, sizeof(mCollText), _T("no collision detection"));
+          break;
+        case VK_F2:
+          mRenderer->setCollMode(R_COLL_MODE_NO_GRAVITY);
+          sprintf_s(mCollText, sizeof(mCollText), _T("collision detection, no gravity"));
           break;
         case VK_F3:
-          mRenderer->setCollMode(R_COLL_MODE_FULL);
+          mRenderer->setCollMode(R_COLL_MODE_GRAVITY);
+          sprintf_s(mCollText, sizeof(mCollText), _T("collision detection, with gravity"));
           break;
         case VK_F8:			
 					switchFullScreen();
 					break;
-			}
-			
+			}			
 	}
 
   return ::DefWindowProc(mhWinHandle, msg, wParam, lParam);
@@ -149,7 +156,7 @@ void BaseApp::createWindow(void)
   HINSTANCE hInstance = GetModuleHandle(0);	
   WNDCLASS winclass;
 
-  winclass.lpszClassName = "bsp renderer";
+  winclass.lpszClassName = "bsp-renderer";
   winclass.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
   winclass.style         = CS_HREDRAW | CS_VREDRAW;
   winclass.lpfnWndProc   = WinProc; 
@@ -168,8 +175,8 @@ void BaseApp::createWindow(void)
   RECT rect = {0, 0, 800, 600};
 
   mhWinHandle = CreateWindow(
-    "bsp renderer",
-    "bsp renderer",
+    "bsp-renderer",
+    "bsp-renderer, press F8 to toggle full screen",
     WS_OVERLAPPED,
     0,
     0,
@@ -277,19 +284,19 @@ void BaseApp::createDevice(void)
   D3DCAPS9 caps;
   V(md3dInterface->GetDeviceCaps(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, &caps));
   
-#ifdef NO_SHADERS
+#ifdef NO_HW_VERTEXPROCESSING
   flags = D3DCREATE_SOFTWARE_VERTEXPROCESSING;
 #else
   flags = D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE;
 #endif
 
-#ifndef NO_SHADERS
+#ifndef NO_HW_VERTEXPROCESSING
   if (!(caps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT) ||
       !(caps.DevCaps & D3DCREATE_PUREDEVICE))
   {
-    cout << "NO_SHADERS is not defined, and the program \n";
+    cout << "NO_HW_VERTEXPROCESSING is not defined, and the program \n";
     cout << "is running on a computer without HW vertex processing.\n";
-    cout << "Define NO_SHADERS and recompile, or \n";
+    cout << "Define NO_HW_VERTEXPROCESSING and recompile, or \n";
     cout << "run the appropriate executable.\n";
     cout << "Exiting in 20 seconds.\n";
     Sleep(20000);
@@ -348,10 +355,14 @@ void BaseApp::draw(float dt)
     mRenderer->draw();
 
     // draw the fps counter
-    RECT rc;
-    SetRect( &rc, 0, 0 , 50, 50 );        
+    RECT rc, rc2, rc3;
+    SetRect( &rc, 0, 0 , 50, 20 );    
+    SetRect( &rc2, 0, 20 , 50, 40 );
+    SetRect( &rc3, 0, 40 , 50, 60 );
     updateFpsCounter(dt);
-    mFont->DrawText( NULL, fpsText, -1, &rc, DT_NOCLIP, D3DXCOLOR( 0.5f, 0.5f, 0.5f, 1.0f ));
+    mFont->DrawText( NULL, "bsp-renderer", -1, &rc, DT_NOCLIP, mFontColor);
+    mFont->DrawText( NULL, mCollText, -1, &rc2, DT_NOCLIP, mFontColor);
+    mFont->DrawText( NULL, mFpsText, -1, &rc3, DT_NOCLIP, mFontColor);
 
     V(md3dDevice->EndScene());		
 
@@ -464,6 +475,9 @@ void BaseApp::initRenderer(string cfgFile)
   mRenderer->initRenderer();
   mRenderer->setDInput(mDInput);
   mRenderer->createSkyFX();
+  mRenderer->setCollMode(R_COLL_MODE_DISABLED);
+
+  sprintf_s(mCollText, sizeof(mCollText), _T("no collision detection"));
 
   onResetDevice();	
 }
@@ -484,7 +498,7 @@ void BaseApp::updateFpsCounter(const float dt)
     timeCounter    = 0.0f;
     frameCounter   = 0.0f;
 
-    sprintf_s(fpsText, sizeof(fpsText), _T("no collision detection\nfps: %.2f"), framespersecond);
+    sprintf_s(mFpsText, sizeof(mFpsText), _T("fps: %.2f"), framespersecond);
   }	
 }
 

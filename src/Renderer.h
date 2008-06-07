@@ -34,7 +34,7 @@ along with bsp-renderer.  If not, see <http://www.gnu.org/licenses/>.
 
 #define TEXTURE_QUALITY /*D3DTEXF_LINEAR*/ D3DTEXF_ANISOTROPIC 
 
-enum {R_COLL_MODE_DISABLED, R_COLL_MODE_NO_GRAVITY, R_COLL_MODE_FULL};
+enum {R_COLL_MODE_DISABLED, R_COLL_MODE_NO_GRAVITY, R_COLL_MODE_GRAVITY};
 
 class Renderer
 {

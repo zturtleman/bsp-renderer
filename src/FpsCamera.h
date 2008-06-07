@@ -29,7 +29,7 @@ along with bsp-renderer.  If not, see <http://www.gnu.org/licenses/>.
 #include "ViewFrustum.h"
 #include "Collision.h"
 
-enum {COLL_MODE_DISABLED, COLL_MODE_NO_GRAVITY, COLL_MODE_FULL};
+enum {COLL_MODE_DISABLED, COLL_MODE_NO_GRAVITY, COLL_MODE_GRAVITY};
 
 class FpsCamera
 {

@@ -75,7 +75,7 @@ void FpsCamera::update(const float dt)
   if (mDInput->keyDown(DIK_A))
     mDir -= mRightVector;
 
-  if (mCollMode == COLL_MODE_FULL)  
+  if (mCollMode == COLL_MODE_GRAVITY)  
     mDir.y = 0.0f;
 
   D3DXVec3Normalize(&mDir, &mDir);
@@ -91,7 +91,7 @@ void FpsCamera::update(const float dt)
 
   const float PLAYER_HEIGHT = 50.0f;
 
-  if (mCollMode == COLL_MODE_FULL)
+  if (mCollMode == COLL_MODE_GRAVITY)
   {  
     // lock to ground
     D3DXVECTOR3 yPos = mPosition + D3DXVECTOR3(0.0f, -PLAYER_HEIGHT, 0.0f);		
@@ -118,7 +118,12 @@ void FpsCamera::update(const float dt)
     mCollision->traceSphere(oldPos, mPosition, 10.0f); 
     mCollision->getTraceResult(&mPosition);	    
   }
-
+  else if (mCollMode == COLL_MODE_NO_GRAVITY)
+  {
+    // trace, adjust position
+    mCollision->traceSphere(oldPos, mPosition, 10.0f); 
+    mCollision->getTraceResult(&mPosition);	 
+  }
 
   // build the camera matrices
   D3DXMATRIX Rotation;
