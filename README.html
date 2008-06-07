@@ -1,13 +1,118 @@
 <HTML>
  <HEAD> 
-  <TITLE> bsp-renderer</TITLE>
+  <TITLE> README</TITLE>
  </HEAD>
  <BODY BGCOLOR="#000044" TEXT="WHITE" VLINK="WHITE">
-  <H2> bsp-renderer</H2>
+  <H2> Introduction</H2>
 bsp-renderer is a program for displaying levels stored in the 
 quake3 bsp map format. It allows the user to move around in the 
 levels using and first person camera and collision detection. 
 
-  
+The downloadable distribution of the program contains the source code and prebuilt executables. It also contains 
+the libraries necessary to build the source, and a Quake III level called "The Forlorn Hope", which was found
+ at http://www.users.on.net/justonefix/.<BR>
+<H3> References </H3>
+The information on following web sites were heavily used  during the development.<BR>
+<BR>
+<span style="font-weight: bold; text-decoration: underline;"></span>
+<span style="font-weight: bold;">Rendering Quake 3 Maps<br>
+</span>
+<table style="text-align: left; width: 100%;" border="0" cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="width: 20%;">Author:</td>
+      <td>Morgan McGuire</td>
+    </tr>
+    <tr>
+      <td>URL:</td>
+      <td>http://graphics.cs.brown.edu/games/quake/quake3.html</td>
+    </tr>    
+  </tbody>
+</table>
+<BR>
+<span style="font-weight: bold; text-decoration: underline;"></span>
+<span style="font-weight: bold;">Unofficial Quake 3 Map Specs<br>
+</span>
+<table style="text-align: left; width: 100%;" border="0" cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="width: 20%;">Author:</td>
+      <td>Kekoa Proudfoot</td>
+    </tr>
+    <tr>
+      <td>URL:</td>
+      <td>http://graphics.stanford.edu/~kekoa/q3/</td>
+    </tr>    
+  </tbody>
+</table>
+<BR>
+<span style="font-weight: bold; text-decoration: underline;"></span>
+<span style="font-weight: bold;">Quake 3 BSP Collision Detection<br>
+</span>
+<table style="text-align: left; width: 100%;" border="0" cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="width: 20%;">Author:</td>
+      <td>Nathan Ostgard</td>
+    </tr>
+    <tr>
+      <td>URL:</td>
+      <td>http://www.devmaster.net/articles/quake3collision/</td>
+    </tr>    
+  </tbody>
+</table>
+<H2> Licensing </H2>  
+bsp-renderer is released under GPL version 3. However, it relies on several third party libraries, 
+as well as pieces or source code from other open source programs. An overview of these licenses is given here.
+
+<H3> Source code licenses and credts</H3>
+The source for the collision detection (but not the collision response) is based on code from http://www.devmaster.net/articles/quake3collision/, which in turn comes 
+from the Quake III source. <BR>
+The tessellation of the Bezier patches is based on code from http://graphics.cs.brown.edu/games/quake/quake3.html. The code comes originally from The Octagon Engine
+by Paul Baker, http://www.paulsprojects.net/opengl/octagon/octagon.html <BR>
+
+
+<H3> Third party libraries </H3>
+<span style="font-weight: bold; text-decoration: underline;"></span>
+<span style="font-weight: bold;">Zlib<br>
+</span>
+<table style="text-align: left; width: 100%;" border="0" cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="width: 20%;">Original Authors:</td>
+      <td>Jean-loup Gailly and Mark
+	Adler</td>
+    </tr>
+    <tr>
+      <td>Website:</td>
+      <td>http://www.zlib.net</td>
+    </tr>
+    <tr>
+      <td>Licensed Under:</td>
+      <td>Zlib License&nbsp;</td>
+    </tr>
+  </tbody>
+</table>
+<BR>
+<span style="font-weight: bold; text-decoration: underline;"></span>
+<span style="font-weight: bold;">Zlib<br>
+</span>
+<table style="text-align: left; width: 100%;" border="0" cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="width: 20%;">Original Author:</td>
+      <td>Guido Draheim</td>
+    </tr>
+    <tr>
+      <td>Website:</td>
+      <td>http://zziplib.sourceforge.net</td>
+    </tr>
+    <tr>
+      <td>Licensed Under:</td>
+      <td>Lesser GNU General Public License</td>
+    </tr>
+  </tbody>
+</table>
+Copyright &copy; 2008 Daniel Örstadius 
  </BODY>
 </HTML>
