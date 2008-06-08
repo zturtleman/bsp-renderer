@@ -4,9 +4,9 @@
  </HEAD>
  <BODY BGCOLOR="#000044" TEXT="WHITE" VLINK="WHITE">
   <H2> Introduction</H2>
-bsp-renderer is an open source application for displaying levels stored in the 
+bsp-renderer is an open source application (<a href="http://www.gnu.org">gnu.org</a>) for displaying levels stored in the 
 quake3 bsp map format. It allows the user to move around in the 
-levels using and first person camera and collision detection. 
+levels using a first person camera and collision detection. 
 The purpose of this document is to give an overview of the bsp-renderer application, including 
 how to use it, which third party libraries and third party code it uses and other technical information.
 The downloadable distribution of the program contains the source code and prebuilt executables. It also contains 
@@ -14,17 +14,23 @@ the libraries necessary to build the source, and a Quake III level called "The F
  at <a href="http://www.users.on.net/justonefix/">http://www.users.on.net/justonefix/</a>. bsp-renderer is currently in version 0.7.<BR>
  <H3> How to run the application</H3>
  The project contains two configurations, debug and release. The prebuilt executable is a release build, which has the flag RELEASE_BUILD set.
- This flag affects were the application looks for the default map. If the application finds a bsp.cfg file in its running directory, it will parse this 
+ This flag adjusts were the application looks for the default map. If the application finds a bsp.cfg file in its running directory, it will parse this 
  file to set which map to load. See the example file for an explanation of the syntax. If no file is present, or no file or map is set in the file, the default map will be 
  loaded ("The Forlorn Hope" found in the 'media' folder). The application will exit if it cannot find the map or data file bsp.cfg specifies. 
- The runtime library zlib1.dll needs to be in the run directory, it it does not exist in the default Windows dll directories.
+ Alos, the runtime library zlib1.dll needs to be in the run directory, if it does not exist in the default Windows dll directories.
  <H4> Keys</H4>
  Use WASD and mouse to move around.<BR>
  F1: disable collision detection.<BR>
  F2: enable collision detection without gravity<BR>
  F3: enable collision detection with gravity<BR>
  F8: toggle full screen mode<BR>
- 
+ <H3> Building bsp-renderer </H3>
+ You will need a DirectX SDK, probably version 9.0c, I haven't tried with earlier versions. You will also need MS Visual 2008 (the expresss version will do).
+ To build bsp-renderer Visual studio needs to have the paths of the DirectX libraries and include files in the VC++ directories settings (click 'options' in the 'tools' menu). 
+ Zziplib.lib, the external library used by bsp-renderer is included in the source release and will be linked automatically when building. 
+ The usage of hardware vertex processing can't be adjusted dynamically in the current state of bsp-renderer. Use the NO_HW_VERTEXPROCESSING preprocessor definition
+ to toggle this. Originally, bsp-renderer always used HW vertex processing, but I had to work on a laptop which didn't support it, hence this option.
+   
 <H2> References </H2>
 The information on following web sites were used during the development.<BR>
 <BR>
