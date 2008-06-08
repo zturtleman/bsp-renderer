@@ -4,14 +4,14 @@
  </HEAD>
  <BODY BGCOLOR="#000044" TEXT="WHITE" VLINK="WHITE">
   <H2> Introduction</H2>
-bsp-renderer is a program for displaying levels stored in the 
+bsp-renderer is an open source application for displaying levels stored in the 
 quake3 bsp map format. It allows the user to move around in the 
 levels using and first person camera and collision detection. 
 The purpose of this document is to give an overview of the bsp-renderer application, including 
-how to use it, which third party libraries and thrid party code it uses and some technical information.
+how to use it, which third party libraries and third party code it uses and other technical information.
 The downloadable distribution of the program contains the source code and prebuilt executables. It also contains 
 the libraries necessary to build the source, and a Quake III level called "The Forlorn Hope", which was found
- at http://www.users.on.net/justonefix/. bsp-renderer is currently in version 0.7.<BR>
+ at <a href="http://www.users.on.net/justonefix/">http://www.users.on.net/justonefix/</a>. bsp-renderer is currently in version 0.7.<BR>
  <H3> How to run the application</H3>
  The project contains two configurations, debug and release. The prebuilt executable is a release build, which has the flag RELEASE_BUILD set.
  This flag affects were the application looks for the default map. If the application finds a bsp.cfg file in its running directory, it will parse this 
@@ -59,8 +59,6 @@ The information on following web sites were used during the development.<BR>
     </tr>    
   </tbody>
 </table>
-For the <p>DirectX specific parts the book <a href="http://www.moon-labs.com">Introduction to 3D Game Programming with DirectX 9.0c: A Shader Approach</a>
- by Frank Luna, and the DirectX SDK documentation were useful.</p>
 <BR>
 <span style="font-weight: bold; text-decoration: underline;"></span>
 <span style="font-weight: bold;">[3] Quake 3 BSP Collision Detection<br>
@@ -77,6 +75,8 @@ For the <p>DirectX specific parts the book <a href="http://www.moon-labs.com">In
     </tr>    
   </tbody>
 </table>
+<p>For the DirectX specific parts the book <a href="http://www.moon-labs.com">Introduction to 3D Game Programming with DirectX 9.0c: A Shader Approach</a>
+ by Frank Luna, and the DirectX SDK documentation were useful.</p>
 <H2> Licensing </H2>  
 bsp-renderer is released under GPL version 3. However, it relies on third party libraries, 
 as well as pieces of source code from other open source programs. An overview of these libraries and source code is given here. 

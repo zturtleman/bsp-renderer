@@ -17,30 +17,4 @@ along with bsp-renderer.  If not, see <http://www.gnu.org/licenses/>.
 
 =========================================
 
-bsp-renderer is a program for displaying levels stored in the quake3 bsp map format. It allows the user to move around in the levels using and first person camera and collision detection. 
-
-
-=========================================
-
-Licensing:
-
-3rd party libraries used by bsp-renderer.
-
-Zlib
-
-Original Authors: 	Jean-loup Gailly and Mark Adler
-Website: 	http://www.zlib.net
-Licensed Under: 	Zlib License 
-
-Zziplib
-Original Author: 	Guido Draheim
-Website: 	http://zziplib.sourceforge.net
-Licensed Under: 	Mozilla Public License 1.1 
-
-
-bsp-renderer uses parts of source code from the following sources:
-
-The Octagon engine
-Original Author:	Paul Baker
-Website:	http://www.paulsprojects.net/opengl/octagon/octagon.html
-
+Please see README.html for more information.
