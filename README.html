@@ -11,12 +11,25 @@ The purpose of this document is to give an overview of the bsp-renderer applicat
 how to use it, which third party libraries and thrid party code it uses and some technical information.
 The downloadable distribution of the program contains the source code and prebuilt executables. It also contains 
 the libraries necessary to build the source, and a Quake III level called "The Forlorn Hope", which was found
- at http://www.users.on.net/justonefix/.<BR>
-<H3> References </H3>
-The information on following web sites were heavily used  during the development.<BR>
+ at http://www.users.on.net/justonefix/. bsp-renderer is currently in version 0.7.<BR>
+ <H3> How to run the application</H3>
+ The project contains two configurations, debug and release. The prebuilt executable is a release build, which has the flag RELEASE_BUILD set.
+ This flag affects were the application looks for the default map. If the application finds a bsp.cfg file in its running directory, it will parse this 
+ file to set which map to load. See the example file for an explanation of the syntax. If no file is present, or no file or map is set in the file, the default map will be 
+ loaded ("The Forlorn Hope" found in the 'media' folder). The application will exit if it cannot find the map or data file bsp.cfg specifies. 
+ The runtime library zlib1.dll needs to be in the run directory, it it does not exist in the default Windows dll directories.
+ <H4> Keys</H4>
+ Use WASD and mouse to move around.<BR>
+ F1: disable collision detection.<BR>
+ F2: enable collision detection without gravity<BR>
+ F3: enable collision detection with gravity<BR>
+ F8: toggle full screen mode<BR>
+ 
+<H2> References </H2>
+The information on following web sites were used during the development.<BR>
 <BR>
 <span style="font-weight: bold; text-decoration: underline;"></span>
-<span style="font-weight: bold;">Rendering Quake 3 Maps<br>
+<span style="font-weight: bold;">[1] Rendering Quake 3 Maps<br>
 </span>
 <table style="text-align: left; width: 100%;" border="0" cellpadding="0" cellspacing="0">
   <tbody>
@@ -32,7 +45,7 @@ The information on following web sites were heavily used  during the development
 </table>
 <BR>
 <span style="font-weight: bold; text-decoration: underline;"></span>
-<span style="font-weight: bold;">Unofficial Quake 3 Map Specs<br>
+<span style="font-weight: bold;">[2] Unofficial Quake 3 Map Specs<br>
 </span>
 <table style="text-align: left; width: 100%;" border="0" cellpadding="0" cellspacing="0">
   <tbody>
@@ -46,9 +59,11 @@ The information on following web sites were heavily used  during the development
     </tr>    
   </tbody>
 </table>
+For the <p>DirectX specific parts the book <a href="http://www.moon-labs.com">Introduction to 3D Game Programming with DirectX 9.0c: A Shader Approach</a>
+ by Frank Luna, and the DirectX SDK documentation were useful.</p>
 <BR>
 <span style="font-weight: bold; text-decoration: underline;"></span>
-<span style="font-weight: bold;">Quake 3 BSP Collision Detection<br>
+<span style="font-weight: bold;">[3] Quake 3 BSP Collision Detection<br>
 </span>
 <table style="text-align: left; width: 100%;" border="0" cellpadding="0" cellspacing="0">
   <tbody>
@@ -63,16 +78,54 @@ The information on following web sites were heavily used  during the development
   </tbody>
 </table>
 <H2> Licensing </H2>  
-bsp-renderer is released under GPL version 3. However, it relies on several third party libraries, 
-as well as pieces or source code from other open source programs. An overview of these licenses is given here.
+bsp-renderer is released under GPL version 3. However, it relies on third party libraries, 
+as well as pieces of source code from other open source programs. An overview of these libraries and source code is given here. 
+The licenses mentioned can be found in the 'licenses' folder.
 
-<H3> Source code licenses and credits</H3>
-The source for the collision detection (but not the collision response) is based on code from http://www.devmaster.net/articles/quake3collision/, which in turn comes 
-from the Quake III source. <BR>
-The tessellation of the Bezier patches is based on code from http://graphics.cs.brown.edu/games/quake/quake3.html. The code comes originally from The Octagon Engine
-by Paul Baker, http://www.paulsprojects.net/opengl/octagon/octagon.html <BR>
-
-
+<H3> Source code licenses</H3>
+Two parts of the source code are based on algorithms originally from other open source applications. 
+<p>- The source for the collision detection (but not the collision response) is based on code from reference [3] above, which in turn comes 
+from the Quake III source. </p>
+<p>- The tessellation of the Bezier patches is based on code from reference [1]. The code originally comes from the Octagon Engine.</p>
+<span style="font-weight: bold; text-decoration: underline;"></span>
+<span style="font-weight: bold;">Quake III<br>
+</span>
+<table style="text-align: left; width: 100%;" border="0" cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="width: 20%;">Original Author:</td>
+      <td>Id Software, Inc.</td>
+    </tr>
+    <tr>
+      <td>Website:</td>
+      <td>http://www.idsoftware.com/</td>
+    </tr>
+    <tr>
+      <td>Licensed Under:</td>
+      <td>GNU General Public License, version 2</td>
+    </tr>
+  </tbody>
+</table>
+<BR>
+<span style="font-weight: bold; text-decoration: underline;"></span>
+<span style="font-weight: bold;">Octagon Engine<br>
+</span>
+<table style="text-align: left; width: 100%;" border="0" cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="width: 20%;">Original Author:</td>
+      <td>Paul Baker</td>
+    </tr>
+    <tr>
+      <td>Website:</td>
+      <td>http://www.paulsprojects.net/opengl/octagon/octagon.html</td>
+    </tr>
+    <tr>
+      <td>Licensed Under:</td>
+      <td>New BSD License&nbsp;</td>
+    </tr>
+  </tbody>
+</table>
 <H3> Third party libraries </H3>
 <span style="font-weight: bold; text-decoration: underline;"></span>
 <span style="font-weight: bold;">Zlib<br>
@@ -96,7 +149,7 @@ by Paul Baker, http://www.paulsprojects.net/opengl/octagon/octagon.html <BR>
 </table>
 <BR>
 <span style="font-weight: bold; text-decoration: underline;"></span>
-<span style="font-weight: bold;">Zlib<br>
+<span style="font-weight: bold;">Zziplib<br>
 </span>
 <table style="text-align: left; width: 100%;" border="0" cellpadding="0" cellspacing="0">
   <tbody>
@@ -114,6 +167,6 @@ by Paul Baker, http://www.paulsprojects.net/opengl/octagon/octagon.html <BR>
     </tr>
   </tbody>
 </table>
-Copyright &copy; 2008 Daniel Örstadius 
+<p>Copyright &copy; 2008 Daniel Örstadius </p>
  </BODY>
 </HTML>
