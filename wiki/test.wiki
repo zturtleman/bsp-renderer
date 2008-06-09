@@ -10,3 +10,13 @@ Overview of the application
 bsp-renderer is written is C++ and it uses DirectX for graphics, hence it runs only on Windows at the moment.
 
 http://code.google.com/p/bsp-renderer/source/browse/trunk/README.html
+
+Limitations:
+
+- Quake III uses "shader files" for the moving and animated parts of the map, these files are not used by bsp-renderer in its present state.
+
+- The collision detection gives strange results with curved surfaces, don't know where the problem is.
+
+- The "physics" (i.e. the gravity) is only rudimentary and quite rough
+
+- Although it is quite fast, it could be faster. The drawing of the bezier patches is most likely not optimal. It seems they were designed for the OpenGL command ... In DirectX, I had to replace this with a loop and multiple calls to DrawIndexedPrimitive(..)
