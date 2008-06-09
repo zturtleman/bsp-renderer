@@ -20,3 +20,13 @@ Limitations:
 - The "physics" (i.e. the gravity) is only rudimentary and quite rough
 
 - Although it is quite fast, it could be faster. The drawing of the bezier patches is most likely not optimal. It seems they were designed for the OpenGL command ... In DirectX, I had to replace this with a loop and multiple calls to DrawIndexedPrimitive(..)
+
+- The check for the capabilities of the graphics card is a bit limited. Also the use of hardware vertex processing is not dynamic, meaning that if you run the executable using this on a graphics card where it is not supported, the program will exit.
+
+Features:
+
+It's about 4000 lines of code, and the GPL notice at the beginning of each files accounts for 500 of these.
+
+bsp-renderer is intended as a starting point for implementing first person shooters, or similar games. 
+
+The reason I created it is that I wanted to make a FPS from scratch (well almost anyway, the map format was created by Id Software ). Of course, there is a long way to go before bsp-renderer can be called an FPS, hence the name.
