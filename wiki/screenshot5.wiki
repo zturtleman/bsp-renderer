@@ -1,3 +1,0 @@
-#summary the first level from Quake III
-
-http://bsp-renderer.googlecode.com/svn/wiki/screenshot4.bmp
