@@ -173,11 +173,12 @@ void BaseApp::createWindow(void)
   }
 
   RECT rect = {0, 0, 800, 600};
+  AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, false);
 
   mhWinHandle = CreateWindow(
     "bsp-renderer",
     "bsp-renderer, press F8 to toggle full screen",
-    WS_OVERLAPPED,
+    WS_OVERLAPPEDWINDOW,
     0,
     0,
     rect.right,
@@ -196,6 +197,7 @@ void BaseApp::createWindow(void)
 
   ShowWindow(mhWinHandle, SW_SHOW);
   UpdateWindow(mhWinHandle);
+  SetWindowPos(mhWinHandle, HWND_TOP, 100, 100, rect.right, rect.bottom, SWP_NOZORDER | SWP_SHOWWINDOW);
 }
 
 int BaseApp::run(void)

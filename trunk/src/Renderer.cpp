@@ -39,6 +39,7 @@ using namespace std;
 
 static unsigned int GetColour (unsigned int a, unsigned int r, unsigned int g, unsigned int b)
 {
+  PARAMETER_NOT_USED(a);
   //return (((a & 0xff)<<24) | ((r & 0xff)<<16) | ((g & 0xff)<<8) | (b & 0xff));
   return (((r & 0xff)<<16) | ((g & 0xff)<<8) | (b & 0xff));
 }
@@ -126,8 +127,8 @@ void Renderer::draw(void)
   int faceIndex = 0;	
   while (mFacesToRender[faceIndex] != -1)
   {
-    if (mD3DTextures[mBspFaces[mFacesToRender[faceIndex]].texture] != NULL 
-      && mBspFaces[mFacesToRender[faceIndex]].lm_index >= 0)
+    if (mD3DTextures[mBspFaces[mFacesToRender[faceIndex]].texture] != NULL )
+      //&& mBspFaces[mFacesToRender[faceIndex]].lm_index >= 0)
     {			
       drawFace(mFacesToRender[faceIndex]);			
     }
@@ -472,7 +473,17 @@ void Renderer::buildPatchBuffers(void)
 
 void Renderer::drawFace(int faceIndex)
 {						
-  // lightmaps and textures							
+  // lightmaps and textures				
+  if (mBspFaces[faceIndex].lm_index < 0)
+  {
+    V(md3dDevice->SetTextureStageState( 0, D3DTSS_TEXCOORDINDEX, 0));
+    V(md3dDevice->SetTexture(0, mD3DTextures[mBspFaces[faceIndex].texture]));
+    mLastLightMap = -1;
+    mLastTexture = -1;
+    V(md3dDevice->SetTextureStageState( 1, D3DTSS_COLOROP,  D3DTOP_DISABLE ));
+  }
+  else
+  {
   if (mLastLightMap != mBspFaces[faceIndex].lm_index)
   {
     V(md3dDevice->SetTextureStageState( 0, D3DTSS_TEXCOORDINDEX, 1));
@@ -486,11 +497,10 @@ void Renderer::drawFace(int faceIndex)
     V(md3dDevice->SetTexture(1, mD3DTextures[mBspFaces[faceIndex].texture]));
     mLastTexture = mBspFaces[faceIndex].texture;
   }
-
+  }
   switch (mBspFaces[faceIndex].type)
   {
-  case MESH:
-    break;
+  case MESH:    
   case POLYGON:		
     if (mSetStreamAndIndices)
     {			
@@ -550,6 +560,9 @@ void Renderer::drawFace(int faceIndex)
   default:
     break;		
   }	
+
+  V(md3dDevice->SetTextureStageState( 1, D3DTSS_COLOROP,  D3DTOP_MODULATE4X));
+  V(md3dDevice->SetTextureStageState( 2, D3DTSS_COLOROP,  D3DTOP_DISABLE ));
 
 }
 

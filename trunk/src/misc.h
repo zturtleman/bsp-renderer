@@ -32,6 +32,7 @@ along with bsp-renderer.  If not, see <http://www.gnu.org/licenses/>.
 
 using namespace std;
 
+#define PARAMETER_NOT_USED(x) x=x
 void exitFunction(string reason);
 
 #define ReleaseCOM(x) { if(x){ x->Release();x = 0; } }
