@@ -218,7 +218,7 @@ void Collision::CheckBrush( Q3BspBrush *brush )
   bool startsOut = false;
   bool endsOut = false;
   vec3f collNormal;
-  float endDistSaved;
+  float endDistSaved = 0.0f;
 
   collNormal = vec3f(0.0f, 0.0f, 0.0f);
 
@@ -228,16 +228,17 @@ void Collision::CheckBrush( Q3BspBrush *brush )
     Q3BspPlane *plane = &mQ3Map->m_pPlanes[brushSide->plane];
 
     float startDistance, endDistance;
+    vec3f planeNormal = vec3f(plane->normal);
 
     if (mTraceType == TT_RAY)
-    {
-      startDistance = vec3dot( &mInputStart, &vec3f(plane->normal) ) - plane->dist;
-      endDistance = vec3dot( &mInputEnd, &vec3f(plane->normal) ) - plane->dist;
+    {    
+      startDistance = vec3dot( &mInputStart, &planeNormal ) - plane->dist;
+      endDistance = vec3dot( &mInputEnd, &planeNormal ) - plane->dist;
     }
-    else if (mTraceType == TT_SPHERE)
+    else /*if (mTraceType == TT_SPHERE)*/
     {
-      startDistance = vec3dot( &mInputStart, &vec3f(plane->normal) ) - (plane->dist + mTraceRadius);
-      endDistance = vec3dot( &mInputEnd, &vec3f(plane->normal) ) - (plane->dist + mTraceRadius);			
+      startDistance = vec3dot( &mInputStart, &planeNormal ) - (plane->dist + mTraceRadius);
+      endDistance = vec3dot( &mInputEnd, &planeNormal ) - (plane->dist + mTraceRadius);			
     }
 
     if (startDistance > 0)
@@ -289,6 +290,7 @@ void Collision::CheckBrush( Q3BspBrush *brush )
     {
       if (startFraction < 0)
         startFraction = 0;
+
       mGoodPos = false;
       mOutputFraction = startFraction;
       mCollisionNormal = collNormal;

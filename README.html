@@ -4,14 +4,22 @@
  </HEAD>
  <BODY BGCOLOR="#000044" TEXT="WHITE" VLINK="WHITE">
   <H2> Introduction</H2>
-bsp-renderer is an open source application (<a href="http://www.gnu.org">gnu.org</a>) for displaying levels stored in the 
-quake3 bsp map format. It allows the user to move around in the 
-levels using a first person camera and collision detection. 
+bsp-renderer is an open source application for displaying levels stored in the quake3 bsp map format. 
+It allows the user to move around in the levels using a first person camera and collision detection.
+It is released under the GNU General Public License version 3 (<a href="http://www.gnu.org">www.gnu.org</a>)  
 The purpose of this document is to give an overview of the bsp-renderer application, including 
 how to use it, which third party libraries and third party code it uses and other technical information.
-The downloadable distribution of the program contains the source code and prebuilt executables. It also contains 
-the libraries necessary to build the source, and a Quake III level called "The Forlorn Hope", which was found
- at <a href="http://www.users.on.net/justonefix/">http://www.users.on.net/justonefix/</a>. bsp-renderer is currently in version 0.7.<BR>
+This distribution of the program contains the source code and prebuilt executables. It also contains 
+the libraries necessary to build the source, and a Quake III level called "The Forlorn Hope", which can be found
+ at <a href="http://www.users.on.net/justonefix/">http://www.users.on.net/justonefix/</a>. bsp-renderer is currently in version 0.7 and
+ is hosted at <a href="http://code.google.com/p/bsp-renderer">code.google.com/p/bsp-renderer</a>
+ <p>
+bsp-renderer is intended as a starting point for implementing first person shooters, or similar games. 
+The reason I created it is that I wanted to porgram an FPS-like game from scratch (well almost anyway, the map format was created by Id Software).
+Of course, there is a long way to go before bsp-renderer can be called an FPS, hence the name.
+It's about 4000 lines of code, and the GPL notice at the beginning of each files accounts for 500 of these
+ </p>
+ 
  <H3> How to run the application</H3>
  The project contains two configurations, debug and release. The prebuilt executable is a release build, which has the flag RELEASE_BUILD set.
  This flag adjusts were the application looks for the default map. If the application finds a bsp.cfg file in its running directory, it will parse this 
@@ -25,12 +33,34 @@ the libraries necessary to build the source, and a Quake III level called "The F
  F3: enable collision detection with gravity<BR>
  F8: toggle full screen mode<BR>
  <H3> Building bsp-renderer </H3>
- You will need a DirectX SDK, probably version 9.0c, I haven't tried with earlier versions. You will also need MS Visual 2008 (the expresss version will do).
+ You will need a DirectX SDK, probably version 9.0c, it is not tested with earlier versions. You will also need MS Visual 2008 (the free express version will do).
  To build bsp-renderer Visual studio needs to have the paths of the DirectX libraries and include files in the VC++ directories settings (click 'options' in the 'tools' menu). 
- Zziplib.lib, the external library used by bsp-renderer is included in the source release and will be linked automatically when building. 
+ Zziplib.lib, the external library used by bsp-renderer is included in the release and will be linked automatically when building. 
  The usage of hardware vertex processing can't be adjusted dynamically in the current state of bsp-renderer. Use the NO_HW_VERTEXPROCESSING preprocessor definition
  to toggle this. Originally, bsp-renderer always used HW vertex processing, but I had to work on a laptop which didn't support it, hence this option.
-   
+ <H3> Limitations</H3>  
+ <p>
+Quake III uses "shader files" for the moving and animated parts of the map, these files are not used by bsp-renderer in its present state.
+</p>
+<p>
+The collision detection does not seem to work well with curved surfaces.
+</p>
+<p>
+The "physics" (i.e. the gravity) is only rudimentary and quite rough
+</p>
+<p>
+Although it is quite fast, it could be faster. The drawing of the bezier patches is most likely not optimal. 
+It seems they were designed for the OpenGL command glMultiDrawElementsEXT() In DirectX, I had to replace this with a loop and multiple 
+calls to DrawIndexedPrimitive().
+</p>
+<p>
+The check for the capabilities of the graphics card is a bit limited.
+The use of hardware vertex processing is not dynamic, meaning that if you run the executable using it on
+ a graphics card where it is not supported, the program will exit.
+</p>
+<p>
+See also <a href=http://code.google.com/p/bsp-renderer/issues/list>http://code.google.com/p/bsp-renderer/issues/list</a>
+</p>
 <H2> References </H2>
 The information on following web sites were used during the development.<BR>
 <BR>
@@ -44,8 +74,8 @@ The information on following web sites were used during the development.<BR>
       <td>Morgan McGuire</td>
     </tr>
     <tr>
-      <td>URL:</td>
-      <td>http://graphics.cs.brown.edu/games/quake/quake3.html</td>
+      <td>Website:</td>
+      <td><a href=http://graphics.cs.brown.edu/games/quake/quake3.html>http://graphics.cs.brown.edu/games/quake/quake3.html</a></td>
     </tr>    
   </tbody>
 </table>
@@ -60,8 +90,8 @@ The information on following web sites were used during the development.<BR>
       <td>Kekoa Proudfoot</td>
     </tr>
     <tr>
-      <td>URL:</td>
-      <td>http://graphics.stanford.edu/~kekoa/q3/</td>
+      <td>Website:</td>
+      <td><a href=http://graphics.stanford.edu/~kekoa/q3/>http://graphics.stanford.edu/~kekoa/q3</a></td>
     </tr>    
   </tbody>
 </table>
@@ -76,8 +106,8 @@ The information on following web sites were used during the development.<BR>
       <td>Nathan Ostgard</td>
     </tr>
     <tr>
-      <td>URL:</td>
-      <td>http://www.devmaster.net/articles/quake3collision/</td>
+      <td>Website:</td>
+      <td><a href=http://www.devmaster.net/articles/quake3collision/>http://www.devmaster.net/articles/quake3collision</a></td>
     </tr>    
   </tbody>
 </table>
@@ -104,7 +134,7 @@ from the Quake III source. </p>
     </tr>
     <tr>
       <td>Website:</td>
-      <td>http://www.idsoftware.com/</td>
+      <td><a href=http://www.idsoftware.com/>http://www.idsoftware.com</a></td>
     </tr>
     <tr>
       <td>Licensed Under:</td>
@@ -124,7 +154,7 @@ from the Quake III source. </p>
     </tr>
     <tr>
       <td>Website:</td>
-      <td>http://www.paulsprojects.net/opengl/octagon/octagon.html</td>
+      <td><a href=http://www.paulsprojects.net/opengl/octagon/octagon.html>http://www.paulsprojects.net/opengl/octagon/octagon.html</a></td>
     </tr>
     <tr>
       <td>Licensed Under:</td>
@@ -144,7 +174,7 @@ from the Quake III source. </p>
     </tr>
     <tr>
       <td>Website:</td>
-      <td>http://zziplib.sourceforge.net</td>
+      <td><a href=http://zziplib.sourceforge.net>http://zziplib.sourceforge.net</a></td>
     </tr>
     <tr>
       <td>Licensed Under:</td>
@@ -165,7 +195,7 @@ from the Quake III source. </p>
     </tr>
     <tr>
       <td>Website:</td>
-      <td>http://www.zlib.net</td>
+      <td><a href=http://www.zlib.net>http://www.zlib.net</a></td>
     </tr>
     <tr>
       <td>Licensed Under:</td>
@@ -173,7 +203,7 @@ from the Quake III source. </p>
     </tr>
   </tbody>
 </table>
-Zlib is used through a runtime library by Zziplib and not by bsp-renderer directly.
+Zlib is used as a runtime library by Zziplib and not by bsp-renderer directly.
 <p>Copyright &copy; 2008 Daniel Örstadius </p>
  </BODY>
 </HTML>
