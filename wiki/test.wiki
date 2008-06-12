@@ -29,4 +29,4 @@ It's about 4000 lines of code, and the GPL notice at the beginning of each files
 
 bsp-renderer is intended as a starting point for implementing first person shooters, or similar games. 
 
-The reason I created it is that I wanted to make a FPS from scratch (well almost anyway, the map format was created by Id Software ). Of course, there is a long way to go before bsp-renderer can be called an FPS, hence the name.
+The reason I created it is that I wanted to make an FPS-like game from scratch (well almost anyway, the map format was created by Id Software ). Of course, there is a long way to go before bsp-renderer can be called an FPS, hence the name.
