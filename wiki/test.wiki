@@ -35,4 +35,4 @@ The sky is a cube mapped texture which was created using terragen. The same sky 
 
 The levels are rendered by using the visibility algorithm described in []. A BSP tree is traversed using the camera position to find an index into a PVS.
 
-The list of faces are sorted using quick sort and culled against the view frustum before being drawn.
+The list of faces are sorted using quicksort and culled against the view frustum before being drawn.
