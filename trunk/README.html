@@ -5,7 +5,7 @@
  <BODY BGCOLOR="#000044" TEXT="WHITE" VLINK="WHITE">
   <H2> Introduction</H2>
 bsp-renderer is an open source application for displaying levels stored in the quake3 bsp map format. 
-It allows the user to move around in the levels using a first person camera and collision detection.
+It allows the user to move around in the levels using a first person camera and rudimentary collision detection.
 It is released under the GNU General Public License version 3 (<a href="http://www.gnu.org">www.gnu.org</a>)  
 The purpose of this document is to give an overview of the bsp-renderer application, including 
 how to use it, which third party libraries and third party code it uses and other technical information.
@@ -38,6 +38,18 @@ It's about 4000 lines of code, and the GPL notice at the beginning of each files
  Zziplib.lib, the external library used by bsp-renderer is included in the release and will be linked automatically when building. 
  The usage of hardware vertex processing can't be adjusted dynamically in the current state of bsp-renderer. Use the NO_HW_VERTEXPROCESSING preprocessor definition
  to toggle this. Originally, bsp-renderer always used HW vertex processing, but I had to work on a laptop which didn't support it, hence this option.
+ <H3> Technical overview  </H3>
+ <p> The levels are rendered using the visibility algorithm briefly described here. For a more in depth description see reference <a href=#ref>[1]</a>
+ (where I received this information). </p>
+ <p>The BSP tree for the level is traversed using the camera position to find a cluster index. This index is used to test the potentially visible 
+ clusters from the current one. The cluster visibility information is in the map data.
+ To find the visible faces we interate over the leafs in the BSP tree (the leafs contain face indexes). First, the cluster of each
+ leaf is tested against the camera cluster. If this test is positive, its bounding box is then culled against the camera's view frustum.
+ If the leaf is not completely outside the frustum, the faces in the leaf are added to the list of faces to render, avoiding to add the 
+ same face twice. This is the heart of the rendering. </p>
+ 
+<p>The sky is a cube mapped texture which was created using <a href=http://www.planetside.co.uk/terragen> Terragen</a>. 
+The same sky is always used, not the ones defined in the .bsp files.</p>
  <H3> Limitations</H3>  
  <p>
 Quake III uses "shader files" for the moving and animated parts of the map, these files are not used by bsp-renderer in its present state.
@@ -61,7 +73,7 @@ The use of hardware vertex processing is not dynamic, meaning that if you run th
 <p>
 See also <a href=http://code.google.com/p/bsp-renderer/issues/list>http://code.google.com/p/bsp-renderer/issues/list</a>
 </p>
-<H2> References </H2>
+<H2><a name="ref"> References </H2>
 The information on following web sites were used during the development.<BR>
 <BR>
 <span style="font-weight: bold; text-decoration: underline;"></span>
