@@ -238,9 +238,9 @@ void Renderer::buildIndexBuffer(void)
 
   // Obtain a pointer to a new index buffer.
   V(md3dDevice->CreateIndexBuffer(
-    (UINT)(mQ3Map->m_iNumMeshVerts * sizeof(unsigned short)),		
+    (UINT)(mQ3Map->m_iNumMeshVerts * sizeof(VB_INDEX_TYPE)),		
     usage,
-    D3DFMT_INDEX16,
+    VB_FORMAT,
     D3DPOOL_DEFAULT,
     &mIB,
     0));
@@ -248,13 +248,13 @@ void Renderer::buildIndexBuffer(void)
   // Now lock it to obtain a pointer to its internal data, and write the
   // cube's index data.
 
-  unsigned short* k = 0;
+  VB_INDEX_TYPE* k = 0;
 
   V(mIB->Lock(0, 0, (void**)&k, 0));
 
   for (int i=0; i < mQ3Map->m_iNumMeshVerts; i++)
   {	
-    k[i] = (unsigned short)mQ3Map->m_pMeshVerts[i];
+    k[i] = (VB_INDEX_TYPE) mQ3Map->m_pMeshVerts[i];
   }
 
   V(mIB->Unlock());
@@ -362,9 +362,9 @@ void Renderer::buildPatchBuffers(void)
     usage = D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY;
 #endif
     V(md3dDevice->CreateIndexBuffer(
-      (UINT)numIndex * sizeof(unsigned short),
+      (UINT)numIndex * sizeof(VB_INDEX_TYPE),
       usage,
-      D3DFMT_INDEX16,
+      VB_FORMAT,
       D3DPOOL_DEFAULT,
       &mBezIB,
       0));
@@ -391,7 +391,7 @@ void Renderer::buildPatchBuffers(void)
       &mBezVB,
       0));
 
-    unsigned short *k = 0;
+    VB_INDEX_TYPE *k = 0;
     V(mBezIB->Lock(0, 0, (void**)&k, D3DLOCK_DISCARD ));		
     int indexBufferindex = 0;
 
@@ -416,7 +416,7 @@ void Renderer::buildPatchBuffers(void)
 
             for (unsigned int index=0; index < patch->bezier[bezierIndex].mNumIndex; index++)
             {	
-              k[indexBufferindex] = (unsigned short)patch->bezier[bezierIndex].mIndex[index];
+              k[indexBufferindex] = (VB_INDEX_TYPE)patch->bezier[bezierIndex].mIndex[index];
               indexBufferindex++;
             }
 
