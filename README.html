@@ -17,13 +17,13 @@ the libraries necessary to build the source, and a level called "The Forlorn Hop
 bsp-renderer is intended as a starting point for implementing first person shooters, or similar games. 
 The reason I created it is that I wanted to porgram an FPS-like game from scratch (well almost anyway, the map format was created by Id Software).
 Of course, there is a long way to go before bsp-renderer can be called an FPS, hence the name.
-It's about 4000 lines of code, and the GPL notice at the beginning of each files accounts for 500 of these.
+It's about 4000 lines of code, and the GPL notices at the beginning of each file account for 500 of these.
  </p>
  
  <H3> How to run the application</H3>
  The project contains two configurations, debug and release. The prebuilt executable is a release build, which has the flag RELEASE_BUILD set.
  This flag adjusts were the application looks for the default map. If the application finds a bsp.cfg file in its running directory, it will parse this 
- file to set which map to load. See the example file for an explanation of the syntax. If no file is present, or no file or map is set in the file, the default map will be 
+ file to set which map to load. The bsp.cfg file in this distribution contains an explanation of the syntax. If no file is present, or no file or map is set in the file, the default map will be 
  loaded ("The Forlorn Hope" found in the 'media' folder). The application will exit if it cannot find the map or data file bsp.cfg specifies. 
  Alos, the runtime library zlib1.dll needs to be in the run directory, if it does not exist in the default Windows dll directories.
  <H4> Keys</H4>
@@ -35,7 +35,7 @@ It's about 4000 lines of code, and the GPL notice at the beginning of each files
  <H3> Building bsp-renderer </H3>
  You will need a DirectX SDK, probably version 9.0c, it is not tested with earlier versions. You will also need MS Visual 2008 (the free express version will do).
  To build bsp-renderer Visual studio needs to have the paths of the DirectX libraries and include files in the VC++ directories settings (click 'options' in the 'tools' menu). 
- Zziplib.lib, the external library used by bsp-renderer is included in the release and will be linked automatically when building. 
+ Zziplib.lib, the external library used by bsp-renderer is included in the distribution and will be linked automatically when building. 
  The usage of hardware vertex processing can't be adjusted dynamically in the current state of bsp-renderer. Use the NO_HW_VERTEXPROCESSING preprocessor definition
  to toggle this. Originally, bsp-renderer always used HW vertex processing, but I had to work on a laptop which didn't support it, hence this option.
  <H3> Technical overview  </H3>
@@ -43,10 +43,10 @@ It's about 4000 lines of code, and the GPL notice at the beginning of each files
  (where I received this information). </p>
  <p>The BSP tree for the level is traversed using the camera position to find a cluster index. This index is used to test the potentially visible 
  clusters from the current one. The cluster visibility information is in the map data.
- To find the visible faces we interate over the leafs in the BSP tree (the leafs contain face indexes). First, the cluster of each
+ To find the visible faces we interate over the leafs in the BSP tree (the leafs contain face indices). First, the cluster of each
  leaf is tested against the camera cluster. If this test is positive, its bounding box is then culled against the camera's view frustum.
- If the leaf is not completely outside the frustum, the faces in the leaf are added to the list of faces to render, avoiding to add the 
- same face twice. This is the heart of the rendering. </p>
+ If the leaf is not completely outside the frustum, the faces in the leaf are added to the list of faces to render while avoiding to add the 
+ same face twice. The list of faces are then sent to the drawing routines.</p>
  
 <p>The sky is a cube mapped texture which was created using <a href=http://www.planetside.co.uk/terragen> Terragen</a>. 
 The same sky is always used, not the ones defined in the .bsp files.</p>
