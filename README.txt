@@ -1,4 +1,4 @@
-Copyright (C) 2008 Daniel Örstadius
+Copyright (C) 2008 Daniel Örstadius, daniel.orstadius@gmail.com
 
 This file is part of bsp-renderer.
 
