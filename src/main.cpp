@@ -58,8 +58,8 @@ void showLicenseMsg(void)
     This is free software, and you are welcome to redistribute it\n\
     under certain conditions. These are described in file COPYING.\n";
 
-  cout << "\n\nIf no level is specified in file bsp.cfg \"The Forlorn Hope\"";
-  cout << "by JustOneFiX will be loaded.\n";
+  cout << "\n\nIf no level is specified in file bsp.cfg, then \"The Forlorn Hope\"";
+  cout << " by JustOneFiX will be loaded.\n";
   cout << "\nTo run bsp-renderer type 'y' and press return: ";
   string answer;
   answer = "y";
