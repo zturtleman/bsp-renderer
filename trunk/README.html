@@ -24,7 +24,7 @@ It's about 4000 lines of code, and the GPL notices at the beginning of each file
  The project contains two configurations, debug and release. The prebuilt executable is a release build, which has the flag RELEASE_BUILD set.
  This flag adjusts were the application looks for the default map. If the application finds a bsp.cfg file in its running directory, it will parse this 
  file to set which map to load. The bsp.cfg file in this distribution contains an explanation of the syntax. If no file is present, or no file or map is set in the file, the default map will be 
- loaded ("The Forlorn Hope" found in the 'media' folder). The application will exit if it cannot find the map or data file bsp.cfg specifies. 
+ loaded (found in the 'media' folder). The application will exit if it cannot find the map or data file bsp.cfg specifies. 
  Alos, the runtime library zlib1.dll needs to be in the run directory, if it does not exist in the default Windows dll directories.
  <H4> Keys</H4>
  Use WASD and mouse to move around.<BR>
@@ -55,7 +55,7 @@ The same sky is always used, not the ones defined in the .bsp files.</p>
 Quake III uses "shader files" for the moving and animated parts of the map, these files are not used by bsp-renderer in its present state.
 </p>
 <p>
-The collision detection does not seem to work well with curved surfaces.
+The collision detection does not seem to work well for all curved surfaces.
 </p>
 <p>
 The "physics" (i.e. the gravity) is only rudimentary and quite rough
@@ -216,6 +216,24 @@ from the Quake III source. </p>
   </tbody>
 </table>
 Zlib is used as a runtime library by Zziplib and not by bsp-renderer directly.
-<p>Copyright &copy; 2008 Daniel Örstadius </p>
+<H3> Media content </H3>
+<span style="font-weight: bold; text-decoration: underline;"></span>
+<span style="font-weight: bold;">The Forlorn Hope (a Quake III level)<br>
+</span>
+<table style="text-align: left; width: 100%;" border="0" cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="width: 20%;">Original Author:</td>
+      <td>JustOneFiX</td>
+    </tr>
+    <tr>
+      <td>Website:</td>
+      <td><a href=http://www.users.on.net/justonefix/>http://www.users.on.net/justonefix/</a></td>
+    </tr>    
+  </tbody>
+</table>
+<BR>
+<BR>
+<p>Copyright &copy; 2008 Daniel Örstadius, daniel.orstadius@gmail.com</p>
  </BODY>
 </HTML>
