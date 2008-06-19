@@ -32,13 +32,12 @@ FpsCamera::FpsCamera()
   D3DXMatrixIdentity(&mProjectionMatrix);
   D3DXMatrixIdentity(&mViewProjMatrix);
 
-  mPosition   = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-  mDir        = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+  mPosition   = D3DXVECTOR3(0.0f, 0.0f, 0.0f);  
   mRightVector      = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
   mUpVector         = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
   mLookVector       = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
 
-  mSpeed = 0.0f;
+  mSpeed = 400.0f;
   mCollMode = COLL_MODE_DISABLED;
 }
 
@@ -53,21 +52,16 @@ void FpsCamera::setLens(float fov, float aspect, float nearZ, float farZ, float 
 void FpsCamera::update(const float dt)
 {
   // check the direct input object	  
+  D3DXVECTOR3 mDir = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
   if (mDInput->keyDown(DIK_W))
   {		
-    mDir += mLookVector;
-    mSpeed = min(400.0f, mSpeed + 50.0f);
+    mDir += mLookVector;    
   }
   else if (mDInput->keyDown(DIK_S))
   {		
-    mDir -= mLookVector;
-    mSpeed = min(400.0f, mSpeed + 50.0f);
-  }
-  else
-  {
-    mSpeed = max(0.0f, mSpeed - 30.0f);
-  }
+    mDir -= mLookVector;    
+  }  
 
   if (mDInput->keyDown(DIK_D))
     mDir += mRightVector;
@@ -215,20 +209,3 @@ void FpsCamera::setCollMode(int mode)
 {
   mCollMode = mode;
 }
-// OLD
-//  // lock to ground
-//D3DXVECTOR3 yPos = mPosition + D3DXVECTOR3(0.0f, -PLAYER_HEIGHT, 0.0f);		
-//  mCollision->traceRay(mPosition, yPos);
-//mCollision->getTraceResult(&yPos);	
-
-//if (fabs(yPos.y - mPosition.y) < PLAYER_HEIGHT)
-//	mPosition.y = yPos.y + PLAYER_HEIGHT;
-
-//  // apply gravity
-//mPosition += D3DXVECTOR3(0.0f, -5.0f, 0.0f);
-
-//  // trace, adjust position
-//mCollision->traceSphere(oldPos, mPosition, 10.0f); 
-//mCollision->getTraceResult(&mPosition);	    
-
-// NEW

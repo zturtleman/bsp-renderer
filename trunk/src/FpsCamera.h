@@ -62,8 +62,7 @@ private:
   D3DXVECTOR3 mUpVector;
   D3DXVECTOR3 mLookVector;
 
-  float mSpeed;
-  D3DXVECTOR3 mDir;
+  float mSpeed;  
   float mScreenHeight;
   float mScreenWidth;
 

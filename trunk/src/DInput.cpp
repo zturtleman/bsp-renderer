@@ -40,10 +40,11 @@ DInput::DInput(DWORD keyboardFlags, DWORD mouseFlags, HWND hwnd)
   hr = mDInput->CreateDevice(GUID_SysKeyboard, &mKeyboardDevice, 0);
   if (FAILED(hr))
   {
-    //DInput_Exit();
-    return;
+    cout << "creating direct input device failed\n";
+    Sleep(3000);
+    exit(1);
   }
-
+  
   V(mKeyboardDevice->SetDataFormat(&c_dfDIKeyboard));
   V(mKeyboardDevice->SetCooperativeLevel(hwnd, keyboardFlags));
   V(mKeyboardDevice->Acquire());

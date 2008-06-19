@@ -456,7 +456,7 @@ bool BaseApp::isDeviceLost()
 
 void BaseApp::initDInput(void)
 {
-  mDInput = new DInput(DISCL_NONEXCLUSIVE|DISCL_FOREGROUND, DISCL_NONEXCLUSIVE|DISCL_FOREGROUND, mhWinHandle);
+  mDInput = new DInput(DISCL_NONEXCLUSIVE|DISCL_BACKGROUND, DISCL_NONEXCLUSIVE|DISCL_BACKGROUND, mhWinHandle);
 
   if (mDInput == NULL)
   {
