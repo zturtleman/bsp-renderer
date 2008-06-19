@@ -29,6 +29,7 @@ along with bsp-renderer.  If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>
 #include <tchar.h>
 #include <dxerr9.h>
+#include <dxerr.h>
 
 using namespace std;
 
@@ -41,13 +42,16 @@ void exitFunction(string reason);
 
 #ifdef _DEBUG
 #ifndef V
-// does not work with UNICODE defined
 #define V(x)													\
 {																\
   HRESULT hr = x;												\
   if( FAILED(hr))												\
 {															\
-  DXTrace( __FILE__, (DWORD)__LINE__, hr, _T(#x), true );	\
+  cout << "\nan error occured\nerror code: "; \
+  cout << DXGetErrorString(hr); \
+  cout << "\nexiting..."; \
+  Sleep(10000); \
+  exit(0); \
 }															\
 }																
 #endif
