@@ -78,6 +78,39 @@ bsp-renderer is released under GPL version 3. However, it relies on third party 
 == Source code licenses ==
 
 Two parts of the source code are based on algorithms originally from other open source applications. 
-- The source for the collision detection (but not the collision response) is based on code from reference [3] above, which in turn comes from the Quake III source. 
 
-- The tessellation of the Bezier patches is based on code from reference [1]. The code originally comes from the Octagon Engine.
+- The source for the collision detection (but not the collision response) is based on code from reference (3) above, which in turn comes from the Quake III source. 
+
+- The tessellation of the Bezier patches is based on code from reference (1). The code originally comes from the Octagon Engine.
+
+Quake III
+Original Author: Id Software, Inc. 
+Website: http://www.idsoftware.com 
+Licensed Under: GNU General Public License, version 2 
+
+Octagon Engine
+Original Author: Paul Baker 
+Website: http://www.paulsprojects.net/opengl/octagon/octagon.html 
+Licensed Under: New BSD License  
+
+==Third party libraries ==
+
+Zziplib
+Original Author: Guido Draheim 
+Website: http://zziplib.sourceforge.net 
+Licensed Under: Lesser GNU Lesser Public License (called the GNU Library Public License in the 'licenses' folder) 
+
+Zlib
+Original Authors: Jean-loup Gailly and Mark Adler 
+Website: http://www.zlib.net 
+Licensed Under: Zlib License  
+Zlib is used as a runtime library by Zziplib and not by bsp-renderer directly. 
+
+== Media content ==
+
+The Forlorn Hope (a Quake III level)
+Original Author: JustOneFiX 
+Website: http://www.users.on.net/justonefix/ 
+
+
+Copyright © 2008 Daniel Örstadius
