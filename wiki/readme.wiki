@@ -21,6 +21,9 @@ The project contains two configurations, debug and release. The prebuilt executa
 Use WASD and mouse to move around.
 
 * F1: disable collision detection.
+
 * F2: enable collision detection without gravity
+
 * F3: enable collision detection with gravity
+
 * F8: toggle full screen mode
