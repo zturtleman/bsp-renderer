@@ -38,3 +38,17 @@ The levels are rendered using the visibility algorithm briefly described here. F
 The BSP tree for the level is traversed using the camera position to find a cluster index. This index is used to test the potentially visible clusters from the current one. The cluster visibility information is in the map data. To find the visible faces we interate over the leafs in the BSP tree (the leafs contain face indices). First, the cluster of each leaf is tested against the camera cluster. If this test is positive, its bounding box is then culled against the camera's view frustum. If the leaf is not completely outside the frustum, the faces in the leaf are added to the list of faces to render while avoiding to add the same face twice. The list of faces are then sent to the drawing routines.
 
 The sky is a cube mapped texture which was created using Terragen (http://www.planetside.co.uk/terragen/). The same sky is always used, not the ones defined in the .bsp files.
+
+== Limitations ==
+
+Quake III uses "shader files" for the moving and animated parts of the map, these files are not used by bsp-renderer in its present state. 
+
+The collision detection does not seem to work well for all curved surfaces. 
+
+The "physics" (i.e. the gravity) is only rudimentary and quite rough 
+
+Although it is quite fast, it could be faster. The drawing of the bezier patches is most likely not optimal. It seems they were designed for the OpenGL command glMultiDrawElementsEXT() In DirectX, I had to replace this with a loop and multiple calls to DrawIndexedPrimitive(). 
+
+The check for the capabilities of the graphics card is a bit limited. The use of hardware vertex processing is not dynamic, meaning that if you run the executable using it on a graphics card where it is not supported, the program will exit. 
+
+See also http://code.google.com/p/bsp-renderer/issues/list 
