@@ -70,3 +70,14 @@ Author: Nathan Ostgard
 Website: http://www.devmaster.net/articles/quake3collision 
 
 For the DirectX specific parts the book Introduction to 3D Game Programming with DirectX 9.0c: A Shader Approach by Frank Luna, and the DirectX SDK documentation were useful.
+
+= Licensing =
+
+bsp-renderer is released under GPL version 3. However, it relies on third party libraries, as well as pieces of source code from other open source programs. An overview of these libraries and source code is given here. The licenses mentioned can be found in the 'licenses' folder. 
+
+== Source code licenses ==
+
+Two parts of the source code are based on algorithms originally from other open source applications. 
+- The source for the collision detection (but not the collision response) is based on code from reference [3] above, which in turn comes from the Quake III source. 
+
+- The tessellation of the Bezier patches is based on code from reference [1]. The code originally comes from the Octagon Engine.
