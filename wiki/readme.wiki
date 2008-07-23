@@ -1,6 +1,6 @@
 #summary basic information about bsp-renderer
 
-== Introduction ==
+= Introduction =
 
 This text is copied from the readme in the download.
 
@@ -53,7 +53,7 @@ The check for the capabilities of the graphics card is a bit limited. The use of
 
 See also http://code.google.com/p/bsp-renderer/issues/list 
 
-== References ==
+= References =
 
 The information on following web sites were used during the development.
 
