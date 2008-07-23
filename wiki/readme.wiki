@@ -52,3 +52,11 @@ Although it is quite fast, it could be faster. The drawing of the bezier patches
 The check for the capabilities of the graphics card is a bit limited. The use of hardware vertex processing is not dynamic, meaning that if you run the executable using it on a graphics card where it is not supported, the program will exit. 
 
 See also http://code.google.com/p/bsp-renderer/issues/list 
+
+== References ==
+
+The information on following web sites were used during the development.
+
+[1] Rendering Quake 3 Maps
+Author: Morgan McGuire 
+Website: http://graphics.cs.brown.edu/games/quake/quake3.html 
