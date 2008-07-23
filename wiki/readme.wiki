@@ -126,7 +126,7 @@ Zlib is used as a runtime library by Zziplib and not by bsp-renderer directly.
 
 == Media content ==
 
-*The Forlorn Hope (a Quake III level)*
+*The Forlorn Hope* (a Quake III level)
 
 Original Author: JustOneFiX 
 
