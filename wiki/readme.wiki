@@ -1,0 +1,12 @@
+#summary basic information about bsp-renderer
+
+= Introduction =
+
+This text is copied from the readme in the download.
+
+
+= Details =
+
+bsp-renderer is an open source application for displaying levels stored in the quake3 bsp map format. It allows the user to move around in the levels using a first person camera and rudimentary collision detection. It is released under the GNU General Public License version 3 (http://www.gnu.org) The purpose of this document is to give an overview of the bsp-renderer application, including how to use it, which third party libraries and third party code it uses and other technical information. This distribution of the program contains the source code and prebuilt executables. It also contains the libraries necessary to build the source, and a level called "The Forlorn Hope", which can be found at http://www.users.on.net/justonefix/. bsp-renderer is currently in version 0.7 and is hosted at code.google.com/p/bsp-renderer
+ 
+bsp-renderer is intended as a starting point for implementing first person shooters, or similar games. The reason I created it is that I wanted to porgram an FPS-like game from scratch (well almost anyway, the map format was created by Id Software). Of course, there is a long way to go before bsp-renderer can be called an FPS, hence the name. It's about 4000 lines of code, and the GPL notices at the beginning of each file account for 500 of these. 
