@@ -58,7 +58,9 @@ See also http://code.google.com/p/bsp-renderer/issues/list
 The information on following web sites were used during the development.
 
 *(1) Rendering Quake 3 Maps*
+
 Author: Morgan McGuire 
+
 Website: http://graphics.cs.brown.edu/games/quake/quake3.html 
 
 *(2) Unofficial Quake 3 Map Specs*
