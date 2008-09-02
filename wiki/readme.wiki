@@ -13,7 +13,7 @@ bsp-renderer is intended as a starting point for implementing first person shoot
 
 == How to run the application ==
 
-The project contains two configurations, debug and release. The prebuilt executable is a release build, which has the flag RELEASE_BUILD set. This flag adjusts were the application looks for the default map. If the application finds a bsp.cfg file in its running directory, it will parse this file to set which map to load. The bsp.cfg file in this distribution contains an explanation of the syntax. If no file is present, or no file or map is set in the file, the default map will be loaded (found in the 'media' folder). The application will exit if it cannot find the map or data file bsp.cfg specifies. Alos, the runtime library zlib1.dll needs to be in the run directory, if it does not exist in the default Windows dll directories. 
+The project contains two configurations, debug and release. The prebuilt executable is a release build, which has the flag RELEASE_BUILD set. This flag adjusts were the application looks for the default map. If the application finds a bsp.cfg file in its running directory, it will parse this file to set which map to load. The bsp.cfg file in this distribution contains an explanation of the syntax. If no file is present, or no file or map is set in the file, the default map will be loaded (found in the 'media' folder). The application will exit if it cannot find the map or data file bsp.cfg specifies. Also, the runtime library zlib1.dll needs to be in the run directory, if it does not exist in the default Windows dll directories. 
 
 
 === Keys ===
